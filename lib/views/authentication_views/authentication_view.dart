@@ -8,19 +8,47 @@ class AuthenticationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, SignupView.id),
-              child: const Text('Signup'),
-            ),
-            RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, LoginView.id),
-              child: const Text('Login'),
-            ),
-          ],
+    return Scaffold(
+      body: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(),
+              Column(
+                children: <Widget>[
+                  Image.asset(
+                    'assets/images/logo_xl.png',
+                    width: 250,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      'Fluttalor',
+                      style:
+                          TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, SignupView.id),
+                    child: const Text('Signup'),
+                  ),
+                  RaisedButton(
+                    onPressed: () => Navigator.pushNamed(context, LoginView.id),
+                    child: const Text('Login'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

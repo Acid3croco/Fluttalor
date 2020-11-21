@@ -11,14 +11,22 @@ class ContactList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contact'),
+        actions: const <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: Icon(Icons.search),
+          )
+        ],
       ),
       body: Center(
         child: Column(
           children: <Widget>[
             const Text('Contact list'),
             RaisedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, AuthenticationView.id))
+              onPressed: () =>
+                  Navigator.pushNamed(context, AuthenticationView.id),
+              child: const Text('Return to auth view'),
+            )
           ],
         ),
       ),
