@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: true == false ? ContactList.id : AuthenticationView.id,
+      initialRoute: AuthenticationView.id,
       routes: <String, WidgetBuilder>{
         ContactList.id: (BuildContext context) => ContactList(),
         ContactHandler.id: (BuildContext context) => ContactHandler(),

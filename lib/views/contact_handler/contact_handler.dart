@@ -8,6 +8,14 @@ class ContactHandler extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add'),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(Icons.check)),
+          )
+        ],
       ),
       body: Center(
         child: Container(
