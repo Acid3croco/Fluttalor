@@ -22,7 +22,7 @@ class SignupView extends StatelessWidget {
                   ),
                 ),
               ),
-              const Text("Nom d'utilisateur"),
+              const Text("Nom d'utilisateur "),
               const TextField(),
               const Text('Mot de passe'),
               const TextField(),
