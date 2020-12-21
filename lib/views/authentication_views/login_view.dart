@@ -1,9 +1,43 @@
+import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   static const String id = '/login_view';
+
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
+  bool _failLogin = false;
+
+  void _submit() {
+    if (_formKey.currentState.validate()) {
+      print('Submit success');
+      AuthService.login(_email.text, _password.text).then((bool result) {
+        if (result) {
+          _formKey.currentState.reset();
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            ContactList.id,
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          _failLogin = true;
+          _formKey.currentState.validate();
+        }
+      });
+    } else {
+      print('Submit fail');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +57,60 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
               ),
-              const Text("Nom d'utilisateur"),
-              const TextField(),
-              const Text('Mot de passe'),
-              const TextField(),
-              RaisedButton(
-                onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  ContactList.id,
-                  (Route<dynamic> route) => false,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _email,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.mail_outline),
+                          labelText: 'Addresse email',
+                          border: OutlineInputBorder()),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String value) {
+                        if (value.trim().isEmpty) {
+                          return 'Email non valide.';
+                        }
+                        if (!value.contains('@')) {
+                          return 'Email non valide, vous devez avoir un @.';
+                        }
+                        if (_failLogin) {
+                          return 'Erreur lors de la connexion. Verifiez vos informations rentré.';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _password,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.lock_outlined),
+                          labelText: 'Mot de passe',
+                          border: OutlineInputBorder()),
+                      obscureText: true,
+                      validator: (String value) {
+                        if (value.trim().isEmpty) {
+                          return 'le mot de passe est vide.';
+                        }
+                        if (value.length < 5) {
+                          return 'Votre mot de passe dois contenir au moins 5 caractères.';
+                        }
+                        if (_failLogin) {
+                          _failLogin = false;
+                          return 'Erreur lors de la connexion. Verifiez vos informations rentré.';
+                        }
+                        return null;
+                      },
+                    ),
+                    Center(
+                      child: OutlineButton(
+                        highlightedBorderColor: Colors.black,
+                        onPressed: _submit,
+                        child: const Text('CONNECTER'),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text('Se connecter'),
               ),
             ],
           ),

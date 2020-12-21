@@ -1,6 +1,5 @@
+import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:provider/provider.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
 import 'package:fluttalor/views/contact_handler/contact_handler.dart';
@@ -8,25 +7,39 @@ import 'package:fluttalor/views/authentication_views/login_view.dart';
 import 'package:fluttalor/views/authentication_views/signup_view.dart';
 import 'package:fluttalor/views/authentication_views/authentication_view.dart';
 
-void main() {
+AuthService appAuth = AuthService();
+
+Widget _defaultHome = AuthenticationView();
+
+Future<bool> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final bool _result = await AuthService.checkToken();
+
+  if (_result) {
+    _defaultHome = ContactList();
+  }
+
   runApp(MyApp());
   //   MultiProvider(
-  //     providers: [],
+  //     providers: [
+  //     ],
   //     child: MyApp(),
   //   ),
   // );
+  return true;
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Fluttalor',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: AuthenticationView.id,
+      home: _defaultHome,
       routes: <String, WidgetBuilder>{
         ContactList.id: (BuildContext context) => ContactList(),
         ContactHandler.id: (BuildContext context) => ContactHandler(),
