@@ -54,6 +54,37 @@ class ContactList extends StatelessWidget {
                   ContactBadge(name: 'AMI'),
                 ],
               ),
+              onTap: () => <void>{
+                showModalBottomSheet<Widget>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25.0),
+                          topRight: Radius.circular(25.0),
+                        ),
+                      ),
+                      child: SafeArea(
+                        minimum:
+                            const EdgeInsets.only(left: 20, right: 20, top: 20),
+                        child: Column(
+                          children: const <Widget>[
+                            Text('bonjour'),
+                            Text('bonjour'),
+                            Text('bonjour'),
+                            Text('bonjour'),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+              },
             ),
           );
         },
