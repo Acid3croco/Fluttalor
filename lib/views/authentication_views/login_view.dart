@@ -103,8 +103,8 @@ class _LoginViewState extends State<LoginView> {
                       },
                     ),
                     Center(
-                      child: OutlineButton(
-                        highlightedBorderColor: Colors.black,
+                      child: ElevatedButton(
+                        // highlightedBorderColor: Colors.black,
                         onPressed: _submit,
                         child: const Text('CONNECTER'),
                       ),

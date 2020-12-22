@@ -23,7 +23,7 @@ class _SignupViewState extends State<SignupView> {
     if (_formKey.currentState.validate() &&
         _password.text == _passwordVerify.text) {
       print('Submit success');
-      AuthService.register(_email.text, _password.text).then((result) {
+      AuthService.register(_email.text, _password.text).then((bool result) {
         if (result) {
           _formKey.currentState.reset();
           Navigator.pushNamed(
@@ -118,8 +118,8 @@ class _SignupViewState extends State<SignupView> {
                       },
                     ),
                     Center(
-                      child: OutlineButton(
-                        highlightedBorderColor: Colors.black,
+                      child: ElevatedButton(
+                        // highlightedBorderColor: Colors.black,
                         onPressed: _submit,
                         child: const Text('ENREGISTRER'),
                       ),

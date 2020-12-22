@@ -7,6 +7,8 @@ import 'package:fluttalor/views/authentication_views/login_view.dart';
 import 'package:fluttalor/views/authentication_views/signup_view.dart';
 import 'package:fluttalor/views/authentication_views/authentication_view.dart';
 
+import 'class/colors.dart';
+
 AuthService appAuth = AuthService();
 
 Widget _defaultHome = AuthenticationView();
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fluttalor',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: myBlue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: _defaultHome,

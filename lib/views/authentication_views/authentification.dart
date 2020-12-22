@@ -12,11 +12,14 @@ class AuthService {
   // Login
   static Future<bool> login(String email, String password) async {
     const String uri = '$apiUrl/user/login/';
-    final dynamic requestBody = {'username': email, 'password': password};
+    final dynamic requestBody = <String, String>{
+      'username': email,
+      'password': password
+    };
 
     final http.Response response = await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: json.encode(requestBody),
     );
 
@@ -37,11 +40,11 @@ class AuthService {
     const String uri = '$apiUrl/token/verify/';
     final String access = await _storage.read(key: 'access');
 
-    final dynamic requestBody = {'token': access};
+    final dynamic requestBody = <String, String>{'token': access};
 
     final http.Response response = await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: json.encode(requestBody),
     );
 
@@ -57,11 +60,11 @@ class AuthService {
     const String uri = '$apiUrl/token/refresh/';
     final String refresh = await _storage.read(key: 'refresh');
 
-    final dynamic requestBody = {'refresh': refresh};
+    final dynamic requestBody = <String, String>{'refresh': refresh};
 
     final http.Response response = await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: json.encode(requestBody),
     );
 
@@ -78,7 +81,7 @@ class AuthService {
   //Register
   static Future<bool> register(String email, String password) async {
     const String uri = '$apiUrl/user/register/';
-    final dynamic requestBody = {
+    final dynamic requestBody = <String, String>{
       'username': email,
       'email': email,
       'password': password
@@ -86,7 +89,7 @@ class AuthService {
 
     final http.Response response = await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: json.encode(requestBody),
     );
 

@@ -36,12 +36,12 @@ class AuthenticationView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () =>
                         Navigator.pushNamed(context, SignupView.id),
                     child: const Text('Signup'),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, LoginView.id),
                     child: const Text('Login'),
                   ),
