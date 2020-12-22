@@ -44,7 +44,7 @@ class _SignupViewState extends State<SignupView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal: 20),
+        minimum: const EdgeInsets.all(20),
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
