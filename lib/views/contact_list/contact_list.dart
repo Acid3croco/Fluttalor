@@ -22,7 +22,7 @@ class ContactList extends StatelessWidget {
         child: Column(
           children: <Widget>[
             const Text('Contact list'),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () =>
                   Navigator.pushNamed(context, AuthenticationView.id),
               child: const Text('Return to auth view'),
