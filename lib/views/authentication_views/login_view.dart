@@ -57,16 +57,20 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 40,
+              ),
               Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     TextFormField(
                       controller: _email,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.mail_outline),
-                          labelText: 'Addresse email',
-                          border: OutlineInputBorder()),
+                        prefixIcon: Icon(Icons.mail_outline),
+                        labelText: 'Addresse email',
+                      ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (String value) {
                         if (value.trim().isEmpty) {
@@ -81,12 +85,15 @@ class _LoginViewState extends State<LoginView> {
                         return null;
                       },
                     ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     TextFormField(
                       controller: _password,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock_outlined),
-                          labelText: 'Mot de passe',
-                          border: OutlineInputBorder()),
+                        prefixIcon: Icon(Icons.lock_outlined),
+                        labelText: 'Mot de passe',
+                      ),
                       obscureText: true,
                       validator: (String value) {
                         if (value.trim().isEmpty) {
@@ -102,12 +109,12 @@ class _LoginViewState extends State<LoginView> {
                         return null;
                       },
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        // highlightedBorderColor: Colors.black,
-                        onPressed: _submit,
-                        child: const Text('CONNECTER'),
-                      ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    ElevatedButton(
+                      onPressed: _submit,
+                      child: const Text('Se connecter'),
                     ),
                   ],
                 ),

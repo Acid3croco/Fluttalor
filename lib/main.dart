@@ -38,8 +38,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fluttalor',
       theme: ThemeData(
+        fontFamily: 'RedHatText',
         primarySwatch: myBlue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 15,
+            textStyle: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            padding: const EdgeInsets.all(15),
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(50),
+            ),
+          ),
+        ),
       ),
       home: _defaultHome,
       routes: <String, WidgetBuilder>{

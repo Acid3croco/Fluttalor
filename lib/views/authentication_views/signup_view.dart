@@ -51,23 +51,27 @@ class _SignupViewState extends State<SignupView> {
             children: <Widget>[
               const Center(
                 child: Text(
-                  "S'enregistrer",
+                  'Créer un compte',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 40,
+              ),
               Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     TextFormField(
                       controller: _email,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.mail_outline),
-                          labelText: 'Addresse email',
-                          border: OutlineInputBorder()),
+                        prefixIcon: Icon(Icons.mail_outline),
+                        labelText: 'Addresse email',
+                      ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (String value) {
                         if (value.trim().isEmpty) {
@@ -83,12 +87,15 @@ class _SignupViewState extends State<SignupView> {
                         return null;
                       },
                     ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     TextFormField(
                       controller: _password,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock_outlined),
-                          labelText: 'Mot de passe',
-                          border: OutlineInputBorder()),
+                        prefixIcon: Icon(Icons.lock_outlined),
+                        labelText: 'Mot de passe',
+                      ),
                       obscureText: true,
                       validator: (String value) {
                         if (value.trim().isEmpty) {
@@ -99,13 +106,16 @@ class _SignupViewState extends State<SignupView> {
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(
+                      height: 30,
                     ),
                     TextFormField(
                       controller: _passwordVerify,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock_outlined),
-                          labelText: 'Vérification du mot de passe',
-                          border: OutlineInputBorder()),
+                        prefixIcon: Icon(Icons.lock_outlined),
+                        labelText: 'Vérification du mot de passe',
+                      ),
                       obscureText: true,
                       validator: (String value) {
                         if (value.trim().isEmpty) {
@@ -117,12 +127,12 @@ class _SignupViewState extends State<SignupView> {
                         return null;
                       },
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        // highlightedBorderColor: Colors.black,
-                        onPressed: _submit,
-                        child: const Text('ENREGISTRER'),
-                      ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    ElevatedButton(
+                      onPressed: _submit,
+                      child: const Text('Créer un compte'),
                     ),
                   ],
                 ),

@@ -18,16 +18,21 @@ class AuthenticationView extends StatelessWidget {
               Container(),
               Column(
                 children: <Widget>[
-                  Image.asset(
-                    'assets/images/logo_xl.png',
-                    width: 250,
+                  Text(
+                    'Gerez vos contacts en un seul endroit',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[900],
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Text(
-                      'Fluttalor',
-                      style:
-                          TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, right: 16),
+                    child: Image.asset(
+                      'assets/images/contact_image.png',
+                      width: 250,
                     ),
                   ),
                 ],
@@ -39,12 +44,18 @@ class AuthenticationView extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () =>
                         Navigator.pushNamed(context, SignupView.id),
-                    child: const Text('Signup'),
+                    child: const Text('Créer un compte'),
                   ),
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, LoginView.id),
-                    child: const Text('Login'),
+                    child: const Text('Se connecter'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.grey[900],
+                    ),
                   ),
+                  const SizedBox(height: 30),
                 ],
               ),
             ],
