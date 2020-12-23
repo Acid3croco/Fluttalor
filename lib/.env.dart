@@ -1,1 +1,1 @@
-const String apiUrl = 'https://fluttalor.herokuapp.com/api/';
+const String apiUrl = 'https://fluttalor.herokuapp.com/api';

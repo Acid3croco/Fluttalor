@@ -1,7 +1,7 @@
-import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
+import 'package:fluttalor/api/authentification.dart';
 
 class LoginView extends StatefulWidget {
   static const String id = '/login_view';

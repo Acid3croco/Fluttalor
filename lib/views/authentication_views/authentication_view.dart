@@ -1,8 +1,8 @@
-import 'package:fluttalor/class/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/authentication_views/login_view.dart';
 import 'package:fluttalor/views/authentication_views/signup_view.dart';
+import 'package:fluttalor/utils/colors.dart';
 
 class AuthenticationView extends StatelessWidget {
   static const String id = '/authentication_view';

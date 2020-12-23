@@ -1,12 +1,11 @@
-// import 'package:fluttalor/views/authentication_views/authentication_view.dart';
-import 'package:fluttalor/class/colors.dart';
-import 'package:fluttalor/views/authentication_views/authentication_view.dart';
-import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
 
 import 'package:badges/badges.dart';
 
+import 'package:fluttalor/views/authentication_views/authentication_view.dart';
+import 'package:fluttalor/api/authentification.dart';
 import 'package:fluttalor/views/contact_handler/contact_handler.dart';
+import 'package:fluttalor/utils/colors.dart';
 
 class ContactList extends StatelessWidget {
   static const String id = '/contact_list';

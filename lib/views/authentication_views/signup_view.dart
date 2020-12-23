@@ -1,7 +1,7 @@
-import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/authentication_views/login_view.dart';
+import 'package:fluttalor/api/authentification.dart';
 
 class SignupView extends StatefulWidget {
   static const String id = '/signup_view';
@@ -64,26 +64,32 @@ class _SignupViewState extends State<SignupView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    TextFormField(
-                      controller: _email,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.mail_outline),
-                        labelText: 'Addresse email',
+                    Container(
+                      child: TextFormField(
+                        controller: _email,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.mail_outline),
+                          labelText: 'Addresse email',
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (String value) {
+                          if (value.trim().isEmpty) {
+                            return 'Email non valide.';
+                          }
+                          if (!value.contains('@')) {
+                            return 'Email non valide, vous devez avoir un @.';
+                          }
+                          if (_failMail) {
+                            _failMail = false;
+                            return 'Cette email est déjà utilisé.';
+                          }
+                          return null;
+                        },
                       ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (String value) {
-                        if (value.trim().isEmpty) {
-                          return 'Email non valide.';
-                        }
-                        if (!value.contains('@')) {
-                          return 'Email non valide, vous devez avoir un @.';
-                        }
-                        if (_failMail) {
-                          _failMail = false;
-                          return 'Cette email est déjà utilisé.';
-                        }
-                        return null;
-                      },
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: kElevationToShadow[12],
+                      ),
                     ),
                     const SizedBox(height: 30),
                     TextFormField(

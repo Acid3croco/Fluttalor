@@ -1,4 +1,3 @@
-import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
@@ -6,8 +5,8 @@ import 'package:fluttalor/views/contact_handler/contact_handler.dart';
 import 'package:fluttalor/views/authentication_views/login_view.dart';
 import 'package:fluttalor/views/authentication_views/signup_view.dart';
 import 'package:fluttalor/views/authentication_views/authentication_view.dart';
-
-import 'class/colors.dart';
+import 'package:fluttalor/api/authentification.dart';
+import 'package:fluttalor/utils/colors.dart';
 
 AuthService appAuth = AuthService();
 
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            elevation: 15,
+            elevation: 12,
             textStyle: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -54,6 +53,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(50),
