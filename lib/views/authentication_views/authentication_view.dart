@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/authentication_views/login_view.dart';
 import 'package:fluttalor/views/authentication_views/signup_view.dart';
+import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:fluttalor/utils/colors.dart';
 
 class AuthenticationView extends StatelessWidget {
@@ -41,18 +42,31 @@ class AuthenticationView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, SignupView.id),
-                    child: const Text('Créer un compte'),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, SignupView.id),
+                      child: const Text('Créer un compte'),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: customShadow[1],
+                    ),
                   ),
                   const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, LoginView.id),
-                    child: const Text('Se connecter'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: myDark,
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, LoginView.id),
+                      child: const Text('Se connecter'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        onPrimary: myDark,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: customShadow[1],
                     ),
                   ),
                   const SizedBox(height: 30),

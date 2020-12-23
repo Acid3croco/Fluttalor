@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
 import 'package:fluttalor/views/contact_handler/contact_handler.dart';
@@ -21,7 +22,13 @@ Future<bool> main() async {
     _defaultHome = ContactList();
   }
 
-  runApp(MyApp());
+  // Force orienation do portrait only
+  SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]).then((_) {
+    runApp(MyApp());
+  });
   //   MultiProvider(
   //     providers: [
   //     ],
@@ -42,7 +49,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            elevation: 12,
+            elevation: 0,
             textStyle: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -55,10 +62,13 @@ class MyApp extends StatelessWidget {
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(50),
             ),
+            borderSide: BorderSide.none,
           ),
         ),
       ),

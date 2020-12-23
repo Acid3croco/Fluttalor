@@ -1,3 +1,5 @@
+import 'package:fluttalor/utils/colors.dart';
+import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/authentication_views/login_view.dart';
@@ -18,10 +20,14 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController _passwordVerify = TextEditingController();
 
   bool _failMail = false;
+  bool _formValid = true;
+  String _emailError = '';
+  String _passwordError = '';
+  String _passwordVerifyError = '';
 
   void _submit() {
-    if (_formKey.currentState.validate() &&
-        _password.text == _passwordVerify.text) {
+    _formKey.currentState.validate();
+    if (_formValid && _password.text == _passwordVerify.text) {
       AuthService.register(_email.text, _password.text).then((bool result) {
         if (result) {
           print('Submit success');
@@ -37,8 +43,11 @@ class _SignupViewState extends State<SignupView> {
         }
       });
     } else {
-      print('Submit fail');
+      print('Submit fail, form wrong');
     }
+    setState(() {
+      _formValid = true;
+    });
   }
 
   @override
@@ -65,81 +74,180 @@ class _SignupViewState extends State<SignupView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Container(
-                      child: TextFormField(
-                        controller: _email,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.mail_outline),
-                          labelText: 'Addresse email',
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: TextFormField(
+                            textAlign: TextAlign.left,
+                            controller: _email,
+                            decoration: const InputDecoration(
+                              labelText: 'Addresse email',
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (String value) {
+                              if (value.trim().isEmpty) {
+                                setState(() {
+                                  _formValid = false;
+                                  _emailError = 'Email vide.';
+                                });
+                              } else if (!value.contains('@')) {
+                                setState(() {
+                                  _formValid = false;
+                                  _emailError = 'Email non valide.';
+                                });
+                              } else if (_failMail) {
+                                setState(() {
+                                  _failMail = false;
+                                  _emailError = 'Cette email est déjà utilisé.';
+                                });
+                              } else {
+                                setState(() {
+                                  _formValid = _formValid && true;
+                                  _emailError = '';
+                                });
+                              }
+                              return null;
+                            },
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: customShadow[1],
+                          ),
                         ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (String value) {
-                          if (value.trim().isEmpty) {
-                            return 'Email non valide.';
-                          }
-                          if (!value.contains('@')) {
-                            return 'Email non valide, vous devez avoir un @.';
-                          }
-                          if (_failMail) {
-                            _failMail = false;
-                            return 'Cette email est déjà utilisé.';
-                          }
-                          return null;
-                        },
+                        if (_emailError.isNotEmpty)
+                          ErrorTextField(error: _emailError)
+                        else
+                          Container()
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: TextFormField(
+                            controller: _password,
+                            decoration: const InputDecoration(
+                              labelText: 'Mot de passe',
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                            ),
+                            obscureText: true,
+                            validator: (String value) {
+                              if (value.trim().isEmpty) {
+                                setState(() {
+                                  _formValid = false;
+                                  _passwordError = 'Le mot de passe est vide.';
+                                });
+                              } else if (value.length < 5) {
+                                setState(() {
+                                  _formValid = false;
+                                  _passwordError =
+                                      'Votre mot de passe dois contenir au moins 5 caractères.';
+                                });
+                              } else {
+                                setState(() {
+                                  _formValid = _formValid && true;
+                                  _passwordError = '';
+                                });
+                              }
+                              return null;
+                            },
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: customShadow[1],
+                          ),
+                        ),
+                        if (_passwordError.isNotEmpty)
+                          ErrorTextField(error: _passwordError)
+                        else
+                          Container()
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: TextFormField(
+                            controller: _passwordVerify,
+                            decoration: const InputDecoration(
+                              labelText: 'Vérification du mot de passe',
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                            ),
+                            obscureText: true,
+                            validator: (String value) {
+                              if (_password.text != _passwordVerify.text) {
+                                setState(() {
+                                  _formValid = false;
+                                  _passwordVerifyError =
+                                      'Les mots de passe ne concordent pas';
+                                });
+                              } else {
+                                setState(() {
+                                  _formValid = _formValid && true;
+                                  _passwordVerifyError = '';
+                                });
+                              }
+                              return null;
+                            },
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: customShadow[1],
+                          ),
+                        ),
+                        if (_passwordVerifyError.isNotEmpty)
+                          ErrorTextField(error: _passwordVerifyError)
+                        else
+                          Container()
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      child: ElevatedButton(
+                        onPressed: _submit,
+                        child: const Text('Créer un compte'),
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        boxShadow: kElevationToShadow[12],
+                        boxShadow: customShadow[1],
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    TextFormField(
-                      controller: _password,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.lock_outlined),
-                        labelText: 'Mot de passe',
-                      ),
-                      obscureText: true,
-                      validator: (String value) {
-                        if (value.trim().isEmpty) {
-                          return 'le mot de passe est vide.';
-                        }
-                        if (value.length < 5) {
-                          return 'Votre mot de passe dois contenir au moins 5 caractères.';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    TextFormField(
-                      controller: _passwordVerify,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.lock_outlined),
-                        labelText: 'Vérification du mot de passe',
-                      ),
-                      obscureText: true,
-                      validator: (String value) {
-                        if (value.trim().isEmpty) {
-                          return 'le mot de passe est vide.';
-                        }
-                        if (value.length < 5) {
-                          return 'Votre mot de passe dois contenir au moins 5 caractères.';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    ElevatedButton(
-                      onPressed: _submit,
-                      child: const Text('Créer un compte'),
                     ),
                   ],
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ErrorTextField extends StatelessWidget {
+  const ErrorTextField({
+    Key key,
+    @required String error,
+  })  : _error = error,
+        super(key: key);
+
+  final String _error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 10),
+      child: Text(
+        _error,
+        style: TextStyle(
+          fontSize: 12,
+          color: myRed,
         ),
       ),
     );
