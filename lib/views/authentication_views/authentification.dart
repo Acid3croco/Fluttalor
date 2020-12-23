@@ -101,7 +101,7 @@ class AuthService {
   }
 
   // Logout
-  Future<void> logout() async {
+  static Future<void> logout() async {
     return await _storage.deleteAll();
   }
 }

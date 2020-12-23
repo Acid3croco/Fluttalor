@@ -1,1 +1,1 @@
-const String apiUrl = 'http://127.0.0.1:8000/api';
+const String apiUrl = 'https://fluttalor.herokuapp.com/api/';

@@ -57,9 +57,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 30),
               Form(
                 key: _formKey,
                 child: Column(
@@ -85,9 +83,7 @@ class _LoginViewState extends State<LoginView> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     TextFormField(
                       controller: _password,
                       decoration: const InputDecoration(
@@ -97,7 +93,7 @@ class _LoginViewState extends State<LoginView> {
                       obscureText: true,
                       validator: (String value) {
                         if (value.trim().isEmpty) {
-                          return 'le mot de passe est vide.';
+                          return 'Le mot de passe est vide.';
                         }
                         if (value.length < 5) {
                           return 'Votre mot de passe dois contenir au moins 5 caractères.';
@@ -109,9 +105,7 @@ class _LoginViewState extends State<LoginView> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: _submit,
                       child: const Text('Se connecter'),

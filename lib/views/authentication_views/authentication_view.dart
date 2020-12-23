@@ -1,3 +1,4 @@
+import 'package:fluttalor/class/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/authentication_views/login_view.dart';
@@ -18,12 +19,11 @@ class AuthenticationView extends StatelessWidget {
               Container(),
               Column(
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Gerez vos contacts en un seul endroit',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[900],
                       height: 1.5,
                     ),
                     textAlign: TextAlign.center,
@@ -52,7 +52,7 @@ class AuthenticationView extends StatelessWidget {
                     child: const Text('Se connecter'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.white,
-                      onPrimary: Colors.grey[900],
+                      onPrimary: myDark,
                     ),
                   ),
                   const SizedBox(height: 30),

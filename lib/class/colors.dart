@@ -23,3 +23,9 @@ MaterialColor createMaterialColor(Color color) {
 }
 
 MaterialColor myBlue = createMaterialColor(const Color(0xFF2F80ED));
+MaterialColor myRed = createMaterialColor(const Color(0xFFEF476F));
+MaterialColor myYellow = createMaterialColor(const Color(0xFFFFD166));
+MaterialColor myGreen = createMaterialColor(const Color(0xFF06D6A0));
+MaterialColor myGreyLight = createMaterialColor(const Color(0xFFE9EBF8));
+MaterialColor myGreyDark = createMaterialColor(const Color(0xFF212227));
+MaterialColor myDark = createMaterialColor(const Color(0xFF090C08));

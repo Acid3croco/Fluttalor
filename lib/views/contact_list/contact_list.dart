@@ -1,4 +1,7 @@
 // import 'package:fluttalor/views/authentication_views/authentication_view.dart';
+import 'package:fluttalor/class/colors.dart';
+import 'package:fluttalor/views/authentication_views/authentication_view.dart';
+import 'package:fluttalor/views/authentication_views/authentification.dart';
 import 'package:flutter/material.dart';
 
 import 'package:badges/badges.dart';
@@ -73,11 +76,22 @@ class ContactList extends StatelessWidget {
                         minimum:
                             const EdgeInsets.only(left: 20, right: 20, top: 20),
                         child: Column(
-                          children: const <Widget>[
-                            Text('bonjour'),
-                            Text('bonjour'),
-                            Text('bonjour'),
-                            Text('bonjour'),
+                          children: <Widget>[
+                            const Text('bonjour'),
+                            const Text('bonjour'),
+                            const Text('bonjour'),
+                            const Text('bonjour'),
+                            ElevatedButton(
+                              child: const Text('Deconnexion'),
+                              onPressed: () async {
+                                AuthService.logout();
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  AuthenticationView.id,
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -88,11 +102,6 @@ class ContactList extends StatelessWidget {
             ),
           );
         },
-        // separatorBuilder: (BuildContext context, int index) {
-        //   return const Divider(
-        //     thickness: 1,
-        //   );
-        // },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, ContactHandler.id),
@@ -118,7 +127,7 @@ class ContactBadge extends StatelessWidget {
         elevation: 0,
         toAnimate: false,
         shape: BadgeShape.square,
-        badgeColor: Colors.green,
+        badgeColor: myGreen,
         borderRadius: BorderRadius.circular(50),
         badgeContent: Text(
           name,

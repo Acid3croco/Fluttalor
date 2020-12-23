@@ -58,9 +58,7 @@ class _SignupViewState extends State<SignupView> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 30),
               Form(
                 key: _formKey,
                 child: Column(
@@ -87,9 +85,7 @@ class _SignupViewState extends State<SignupView> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     TextFormField(
                       controller: _password,
                       decoration: const InputDecoration(
@@ -107,9 +103,7 @@ class _SignupViewState extends State<SignupView> {
                         return null;
                       },
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     TextFormField(
                       controller: _passwordVerify,
                       decoration: const InputDecoration(
