@@ -23,7 +23,6 @@ class AuthService {
       body: json.encode(requestBody),
     );
 
-    print(response.body);
     if (response.statusCode == 200) {
       final dynamic tokens = json.decode(response.body);
 
