@@ -20,9 +20,9 @@ class _LoginViewState extends State<LoginView> {
 
   void _submit() {
     if (_formKey.currentState.validate()) {
-      print('Submit success');
       AuthService.login(_email.text, _password.text).then((bool result) {
         if (result) {
+          print('Submit success');
           _formKey.currentState.reset();
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -32,6 +32,7 @@ class _LoginViewState extends State<LoginView> {
         } else {
           _failLogin = true;
           _formKey.currentState.validate();
+          print('Submit fail');
         }
       });
     } else {

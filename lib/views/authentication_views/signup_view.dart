@@ -22,9 +22,9 @@ class _SignupViewState extends State<SignupView> {
   void _submit() {
     if (_formKey.currentState.validate() &&
         _password.text == _passwordVerify.text) {
-      print('Submit success');
       AuthService.register(_email.text, _password.text).then((bool result) {
         if (result) {
+          print('Submit success');
           _formKey.currentState.reset();
           Navigator.pushNamed(
             context,
@@ -33,6 +33,7 @@ class _SignupViewState extends State<SignupView> {
         } else {
           _failMail = true;
           _formKey.currentState.validate();
+          print('Submit fail');
         }
       });
     } else {
