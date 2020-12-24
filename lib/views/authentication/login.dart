@@ -1,9 +1,8 @@
+import 'package:fluttalor/api/authentificationService.dart';
+import 'package:fluttalor/views/authentication/signup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
-import 'package:fluttalor/views/authentication_views/signup_view.dart'
-    show ErrorTextField;
-import 'package:fluttalor/api/authentification.dart';
 import 'package:fluttalor/utils/custom_shadows.dart';
 
 class LoginView extends StatefulWidget {
@@ -33,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
           _formKey.currentState.reset();
           Navigator.pushNamedAndRemoveUntil(
             context,
-            ContactList.id,
+            ContactListView.id,
             (Route<dynamic> route) => false,
           );
         } else {

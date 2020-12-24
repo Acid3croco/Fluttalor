@@ -1,13 +1,16 @@
+import 'package:fluttalor/providers/contactListModel.dart';
+import 'package:fluttalor/providers/labelListModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
 import 'package:fluttalor/views/contact_handler/contact_handler.dart';
-import 'package:fluttalor/views/authentication_views/login_view.dart';
-import 'package:fluttalor/views/authentication_views/signup_view.dart';
-import 'package:fluttalor/views/authentication_views/authentication_view.dart';
-import 'package:fluttalor/api/authentification.dart';
+import 'package:fluttalor/views/authentication/login.dart';
+import 'package:fluttalor/views/authentication/signup.dart';
+import 'package:fluttalor/views/authentication/authentication.dart';
+import 'package:fluttalor/api/authentificationService.dart';
 import 'package:fluttalor/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 AuthService appAuth = AuthService();
 
@@ -19,7 +22,7 @@ Future<bool> main() async {
   final bool _result = await AuthService.checkToken();
 
   if (_result) {
-    _defaultHome = ContactList();
+    _defaultHome = ContactListView();
   }
 
   // Force orienation do portrait only
@@ -27,14 +30,17 @@ Future<bool> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]).then((_) {
-    runApp(MyApp());
+    runApp(
+      MultiProvider(
+        providers: [
+          // ChangeNotifierProvider(create: (_) => Profile()),
+          ChangeNotifierProvider(create: (_) => ContactList()),
+          ChangeNotifierProvider(create: (_) => LabelList()),
+        ],
+        child: MyApp(),
+      ),
+    );
   });
-  //   MultiProvider(
-  //     providers: [
-  //     ],
-  //     child: MyApp(),
-  //   ),
-  // );
   return true;
 }
 
@@ -74,7 +80,7 @@ class MyApp extends StatelessWidget {
       ),
       home: _defaultHome,
       routes: <String, WidgetBuilder>{
-        ContactList.id: (BuildContext context) => ContactList(),
+        ContactListView.id: (BuildContext context) => ContactListView(),
         ContactHandler.id: (BuildContext context) => ContactHandler(),
         LoginView.id: (BuildContext context) => LoginView(),
         SignupView.id: (BuildContext context) => SignupView(),

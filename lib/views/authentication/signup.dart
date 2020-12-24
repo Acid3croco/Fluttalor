@@ -2,8 +2,8 @@ import 'package:fluttalor/utils/colors.dart';
 import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fluttalor/views/authentication_views/login_view.dart';
-import 'package:fluttalor/api/authentification.dart';
+import 'package:fluttalor/views/authentication/login.dart';
+import 'package:fluttalor/api/authentificationService.dart';
 
 class SignupView extends StatefulWidget {
   static const String id = '/signup_view';

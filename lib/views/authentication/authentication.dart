@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:fluttalor/views/authentication_views/login_view.dart';
-import 'package:fluttalor/views/authentication_views/signup_view.dart';
+import 'package:fluttalor/views/authentication/login.dart';
+import 'package:fluttalor/views/authentication/signup.dart';
 import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:fluttalor/utils/colors.dart';
 
