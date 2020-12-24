@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttalor/views/contact_list/contact_list.dart';
+import 'package:fluttalor/views/authentication_views/signup_view.dart'
+    show ErrorTextField;
 import 'package:fluttalor/api/authentification.dart';
+import 'package:fluttalor/utils/custom_shadows.dart';
 
 class LoginView extends StatefulWidget {
   static const String id = '/login_view';
@@ -17,9 +20,13 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _password = TextEditingController();
 
   bool _failLogin = false;
+  bool _formValid = true;
+  String _emailError = '';
+  String _passwordError = '';
 
   void _submit() {
-    if (_formKey.currentState.validate()) {
+    _formKey.currentState.validate();
+    if (_formValid) {
       AuthService.login(_email.text, _password.text).then((bool result) {
         if (result) {
           print('Submit success');
@@ -38,6 +45,9 @@ class _LoginViewState extends State<LoginView> {
     } else {
       print('Submit fail');
     }
+    setState(() {
+      _formValid = true;
+    });
   }
 
   @override
@@ -64,52 +74,111 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    TextFormField(
-                      controller: _email,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.mail_outline),
-                        labelText: 'Addresse email',
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (String value) {
-                        if (value.trim().isEmpty) {
-                          return 'Email non valide.';
-                        }
-                        if (!value.contains('@')) {
-                          return 'Email non valide, vous devez avoir un @.';
-                        }
-                        if (_failLogin) {
-                          return 'Erreur lors de la connexion. Verifiez vos informations rentré.';
-                        }
-                        return null;
-                      },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: TextFormField(
+                            textAlign: TextAlign.left,
+                            controller: _email,
+                            decoration: const InputDecoration(
+                              labelText: 'Addresse email',
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (String value) {
+                              if (value.trim().isEmpty) {
+                                setState(() {
+                                  _formValid = false;
+                                  _emailError = 'Email vide.';
+                                });
+                              } else if (!value.contains('@')) {
+                                setState(() {
+                                  _formValid = false;
+                                  _emailError = 'Email non valide.';
+                                });
+                              } else {
+                                setState(() {
+                                  _formValid = _formValid && true;
+                                  _emailError = '';
+                                });
+                              }
+                              return null;
+                            },
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: customShadow[1],
+                          ),
+                        ),
+                        if (_emailError.isNotEmpty)
+                          ErrorTextField(error: _emailError)
+                        else
+                          Container()
+                      ],
                     ),
                     const SizedBox(height: 30),
-                    TextFormField(
-                      controller: _password,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.lock_outlined),
-                        labelText: 'Mot de passe',
-                      ),
-                      obscureText: true,
-                      validator: (String value) {
-                        if (value.trim().isEmpty) {
-                          return 'Le mot de passe est vide.';
-                        }
-                        if (value.length < 5) {
-                          return 'Votre mot de passe dois contenir au moins 5 caractères.';
-                        }
-                        if (_failLogin) {
-                          _failLogin = false;
-                          return 'Erreur lors de la connexion. Verifiez vos informations rentré.';
-                        }
-                        return null;
-                      },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: TextFormField(
+                            controller: _password,
+                            decoration: const InputDecoration(
+                              labelText: 'Mot de passe',
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                            ),
+                            obscureText: true,
+                            validator: (String value) {
+                              if (value.trim().isEmpty) {
+                                setState(() {
+                                  _formValid = false;
+                                  _passwordError = 'Le mot de passe est vide.';
+                                });
+                              } else if (value.length < 5) {
+                                setState(() {
+                                  _formValid = false;
+                                  _passwordError =
+                                      'Votre mot de passe dois contenir au moins 5 caractères.';
+                                });
+                              } else if (_failLogin) {
+                                setState(() {
+                                  _failLogin = false;
+                                  _passwordError =
+                                      'Erreur lors de la connexion. Verifiez vos informations rentré.';
+                                });
+                              } else {
+                                setState(() {
+                                  _formValid = _formValid && true;
+                                  _passwordError = '';
+                                });
+                              }
+                              return null;
+                            },
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: customShadow[1],
+                          ),
+                        ),
+                        if (_passwordError.isNotEmpty)
+                          ErrorTextField(error: _passwordError)
+                        else
+                          Container()
+                      ],
                     ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: _submit,
-                      child: const Text('Se connecter'),
+                    Container(
+                      child: ElevatedButton(
+                        onPressed: _submit,
+                        child: const Text('Se connecter'),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: customShadow[1],
+                      ),
                     ),
                   ],
                 ),
