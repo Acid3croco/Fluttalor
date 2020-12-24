@@ -29,7 +29,7 @@ class _ContactListViewState extends State<ContactListView> {
           )
         ],
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<dynamic>>(
         future: ContactService.getContacts(),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
