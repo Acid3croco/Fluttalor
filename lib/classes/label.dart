@@ -8,7 +8,7 @@ class Label {
   String _name;
 
   int get pk => _pk;
-  String get nickname => _name;
+  String get name => _name;
 
   void modifyLabel(String name) {
     _name = name;

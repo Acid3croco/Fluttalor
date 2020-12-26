@@ -13,7 +13,7 @@ class Profile with ChangeNotifier {
 
   void createProfile(int pk, String nickname, String firstname, String lastname,
       String phone, String email) {
-    _profile = Contact(pk, nickname, firstname, lastname, phone, email);
+    _profile = Contact(pk, nickname, firstname, lastname, phone, email, null);
     notifyListeners();
   }
 

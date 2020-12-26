@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluttalor/api/labelService.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
 import 'package:fluttalor/providers/labelListModel.dart';
@@ -17,6 +19,29 @@ class ContactListView extends StatefulWidget {
 }
 
 class _ContactListViewState extends State<ContactListView> {
+  Future<bool> getData(BuildContext context) async {
+    List<List<dynamic>> results;
+
+    results = await Future.wait([
+      ContactService.getContacts(),
+      LabelService.getLabels(),
+    ]);
+
+    if (results[0] != null) {
+      context.read<ContactList>().setContacts(results[0]);
+    } else {
+      return false;
+    }
+
+    if (results[1] != null) {
+      context.read<LabelList>().setLabels(results[1]);
+    } else {
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,19 +54,10 @@ class _ContactListViewState extends State<ContactListView> {
           )
         ],
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: ContactService.getContacts(),
-        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+      body: FutureBuilder<bool>(
+        future: getData(context),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
-            // WidgetsBinding.instance.addPostFrameCallback((_) {
-            //   context.read<ContactList>().setContacts(snapshot.data);
-            //   LabelService.getLabels().then((List<dynamic> labels) {
-            //     if (labels != null) {
-            //       context.read<LabelList>().setLabels(labels);
-            //     }
-            //   });
-            // });
-
             return ListView.builder(
               itemCount: context.watch<ContactList>().getLength(),
               itemBuilder: (BuildContext context, int index) {

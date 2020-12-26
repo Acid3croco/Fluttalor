@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:fluttalor/classes/contact.dart';
+import 'package:fluttalor/classes/label.dart';
 import 'package:fluttalor/utils/colors.dart';
 import 'package:fluttalor/views/contact_list/contact_modal.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +45,12 @@ class _ContactTileViewState extends State<ContactTileView> {
         ),
       ),
       subtitle: Row(
-        children: const <Widget>[
-          ContactBadge(name: 'AMI'),
-          ContactBadge(name: 'AMI'),
-          ContactBadge(name: 'AMI'),
+        children: <Widget>[
+          if (widget.contact.labels.isNotEmpty)
+            for (final Label label in widget.contact.labels)
+              ContactBadge(name: label.name)
+          else
+            Container(),
         ],
       ),
       onTap: () => <void>{

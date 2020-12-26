@@ -15,6 +15,15 @@ class LabelList with ChangeNotifier {
     return _labelList.length;
   }
 
+  String getLabelNameFromPk(int pk) {
+    for (final Label label in _labelList) {
+      if (label.pk == pk) {
+        return label.name;
+      }
+    }
+    return null;
+  }
+
   void setLabels(List<dynamic> labelData) {
     final List<Label> labelList = <Label>[];
 

@@ -23,7 +23,7 @@ class LabelService {
       },
     );
 
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> labelList =
           json.decode(response.body) as List<dynamic>;
@@ -46,7 +46,7 @@ class LabelService {
       },
     );
 
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       return true;
     }
@@ -67,7 +67,7 @@ class LabelService {
       },
     );
 
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       return true;
     }
@@ -88,7 +88,7 @@ class LabelService {
       },
     );
 
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       return true;
     }
@@ -109,7 +109,7 @@ class LabelService {
       },
     );
 
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       return true;
     }
