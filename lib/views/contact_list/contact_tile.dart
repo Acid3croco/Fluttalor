@@ -1,23 +1,20 @@
-import 'package:badges/badges.dart';
-import 'package:fluttalor/classes/contact.dart';
-import 'package:fluttalor/classes/label.dart';
-import 'package:fluttalor/utils/colors.dart';
-import 'package:fluttalor/views/contact_list/contact_modal.dart';
 import 'package:flutter/material.dart';
 
-class ContactTileView extends StatefulWidget {
-  const ContactTileView({this.index, this.contact});
+import 'package:badges/badges.dart';
 
-  final int index;
+import 'package:fluttalor/utils/colors.dart';
+import 'package:fluttalor/classes/label.dart';
+import 'package:fluttalor/classes/contact.dart';
+import 'package:fluttalor/views/contact_list/contact_modal.dart';
+
+class ContactTile extends StatelessWidget {
+  const ContactTile({
+    Key key,
+    @required this.contact,
+  }) : super(key: key);
+
   final Contact contact;
 
-  static const String id = '/contact_tile';
-
-  @override
-  _ContactTileViewState createState() => _ContactTileViewState();
-}
-
-class _ContactTileViewState extends State<ContactTileView> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -27,27 +24,15 @@ class _ContactTileViewState extends State<ContactTileView> {
       ),
       title: Padding(
         padding: const EdgeInsets.only(bottom: 5),
-        child: Column(
-          children: <Widget>[
-            Text(
-              widget.contact.nickname,
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-            Text(
-              widget.contact.firstname,
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-            Text(
-              widget.contact.lastname,
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            )
-          ],
+        child: Text(
+          '${contact.nickname} ${contact.firstname} ${contact.lastname}',
+          style: const TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
       subtitle: Row(
         children: <Widget>[
-          if (widget.contact.labels.isNotEmpty)
-            for (final Label label in widget.contact.labels)
+          if (contact.labels.isNotEmpty)
+            for (final Label label in contact.labels)
               ContactBadge(name: label.name)
           else
             Container(),

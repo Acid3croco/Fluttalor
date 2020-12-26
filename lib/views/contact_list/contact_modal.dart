@@ -2,14 +2,7 @@ import 'package:fluttalor/api/authentificationService.dart';
 import 'package:fluttalor/views/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 
-class ContactModalView extends StatefulWidget {
-  static const String id = '/contact_tile';
-
-  @override
-  _ContactModalViewState createState() => _ContactModalViewState();
-}
-
-class _ContactModalViewState extends State<ContactModalView> {
+class ContactModalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

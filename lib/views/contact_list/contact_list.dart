@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:fluttalor/api/labelService.dart';
-import 'package:fluttalor/providers/contactListModel.dart';
-import 'package:fluttalor/providers/labelListModel.dart';
-import 'package:fluttalor/views/contact_list/contact_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:fluttalor/views/contact_handler/contact_handler.dart';
-
+import 'package:fluttalor/classes/contact.dart';
+import 'package:fluttalor/api/labelService.dart';
 import 'package:fluttalor/api/contactService.dart';
+import 'package:fluttalor/providers/labelListModel.dart';
+import 'package:fluttalor/providers/contactListModel.dart';
+import 'package:fluttalor/views/contact_list/contact_tile.dart';
+import 'package:fluttalor/views/contact_handler/contact_handler.dart';
 
 class ContactListView extends StatefulWidget {
   static const String id = '/contact_list';
@@ -61,6 +61,8 @@ class _ContactListViewState extends State<ContactListView> {
             return ListView.builder(
               itemCount: context.watch<ContactList>().getLength(),
               itemBuilder: (BuildContext context, int index) {
+                final Contact currContact =
+                    context.watch<ContactList>().getContactFromIndex(index);
                 return Container(
                   decoration: BoxDecoration(
                     border: Border(
@@ -71,11 +73,7 @@ class _ContactListViewState extends State<ContactListView> {
                               : Colors.transparent),
                     ),
                   ),
-                  child: ContactTileView(
-                    index: index,
-                    contact:
-                        context.watch<ContactList>().getContactFromIndex(index),
-                  ),
+                  child: ContactTile(contact: currContact),
                 );
               },
             );
