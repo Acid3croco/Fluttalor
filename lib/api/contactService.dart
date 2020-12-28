@@ -3,6 +3,7 @@ import 'dart:convert';
 
 // import 'dart:convert';
 import 'package:fluttalor/.env.dart';
+import 'package:fluttalor/classes/contact.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -55,9 +56,18 @@ class ContactService {
   }
 
   // Create contact.
-  static Future<bool> createContact() async {
+  static Future<Contact> createContact(String _nickname, String _firstname,
+      String _lastname, String _phone, String _email) async {
     const String uri = '$apiUrl/contact/';
     final String accessToken = await _storage.read(key: 'access');
+
+    final dynamic requestBody = <String, String>{
+      'nickname': _nickname,
+      'firsname': _firstname,
+      'lastname': _lastname,
+      'phone': _phone,
+      'email': _email
+    };
 
     final http.Response response = await http.post(
       uri,
@@ -65,14 +75,26 @@ class ContactService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken'
       },
+      body: json.encode(requestBody),
     );
 
-    // print(response.body);
+    print(response.body);
     if (response.statusCode == 200) {
-      return true;
+      final dynamic contact = response.body;
+
+      final Contact newContact = Contact(
+          contact['pk'] as int,
+          contact['nickname'] as String,
+          contact['firstname'] as String,
+          contact['lastname'] as String,
+          contact['phone'] as String,
+          contact['email'] as String,
+          contact['icon'] as String,
+          contact['labels'] as List<dynamic>);
+      return newContact;
     }
 
-    return false;
+    return null;
   }
 
   // Modify contact from primary key.

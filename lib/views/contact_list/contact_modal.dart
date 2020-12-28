@@ -1,8 +1,16 @@
 import 'package:fluttalor/api/authentificationService.dart';
+import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/views/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 
-class ContactModalView extends StatelessWidget {
+class ContactModal extends StatelessWidget {
+  const ContactModal({
+    Key key,
+    @required this.contact,
+  }) : super(key: key);
+
+  final Contact contact;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,10 +26,16 @@ class ContactModalView extends StatelessWidget {
         minimum: const EdgeInsets.only(left: 20, right: 20, top: 20),
         child: Column(
           children: <Widget>[
-            const Text('bonjour'),
-            const Text('bonjour'),
-            const Text('bonjour'),
-            const Text('bonjour'),
+            CircleAvatar(
+              radius: 30,
+              backgroundImage:
+                  contact.icon != null ? NetworkImage(contact.icon) : null,
+            ),
+            Text(contact.nickname),
+            Text(contact.firstname),
+            Text(contact.lastname),
+            Text(contact.email),
+            Text(contact.phone),
             ElevatedButton(
               child: const Text('Deconnexion'),
               onPressed: () async {

@@ -19,9 +19,10 @@ class ContactTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      leading: const CircleAvatar(
-        radius: 30,
-      ),
+      leading: CircleAvatar(
+          radius: 30,
+          backgroundImage:
+              contact.icon != null ? NetworkImage(contact.icon) : null),
       title: Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Text(
@@ -44,7 +45,7 @@ class ContactTile extends StatelessWidget {
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
           builder: (BuildContext context) {
-            return ContactModalView();
+            return ContactModal(contact: contact);
           },
         ),
       },

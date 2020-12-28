@@ -85,7 +85,7 @@ class _ContactListViewState extends State<ContactListView> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, ContactHandler.id),
+        onPressed: () => Navigator.pushNamed(context, ContactHandlerView.id),
         child: const Icon(Icons.add),
       ),
     );
