@@ -22,8 +22,15 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   final TextEditingController _email = TextEditingController();
 
   bool _formValid = true;
+  bool _nullField = false;
 
   void _submit() {
+    if (_nickname.text == null &&
+        _firstname.text == null &&
+        _lastname.text == null) {
+      _nullField = true;
+    }
+
     _formKey.currentState.validate();
     if (_formValid) {
       ContactService.createContact(_nickname.text, _firstname.text,
@@ -74,6 +81,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       labelText: 'Surnom',
                       border: OutlineInputBorder()),
                   validator: (String value) {
+                    if (_nullField) {
+                      return "Vous devez remplir au moins l'un de ses champs.";
+                    }
                     return null;
                   },
                 ),
@@ -84,6 +94,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       labelText: 'Prénom',
                       border: OutlineInputBorder()),
                   validator: (String value) {
+                    if (_nullField) {
+                      return "Vous devez remplir au moins l'un de ses champs.";
+                    }
                     return null;
                   },
                 ),
@@ -94,6 +107,12 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       labelText: 'Nom de famille',
                       border: OutlineInputBorder()),
                   validator: (String value) {
+                    if (_nullField) {
+                      setState(() {
+                        _nullField = false;
+                      });
+                      return "Vous devez remplir au moins l'un de ses champs.";
+                    }
                     return null;
                   },
                 ),

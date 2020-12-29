@@ -63,11 +63,15 @@ class ContactService {
 
     final dynamic requestBody = <String, String>{
       'nickname': _nickname,
-      'firsname': _firstname,
+      'firstname': _firstname,
       'lastname': _lastname,
       'phone': _phone,
       'email': _email
     };
+
+    if (_nickname != null) {
+      requestBody['nickname'] = _nickname;
+    }
 
     final http.Response response = await http.post(
       uri,
@@ -79,8 +83,8 @@ class ContactService {
     );
 
     print(response.body);
-    if (response.statusCode == 200) {
-      final dynamic contact = response.body;
+    if (response.statusCode == 201) {
+      final dynamic contact = json.decode(response.body);
 
       final Contact newContact = Contact(
           contact['pk'] as int,
