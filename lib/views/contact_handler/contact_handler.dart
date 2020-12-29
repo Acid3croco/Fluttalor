@@ -1,9 +1,11 @@
 import 'package:fluttalor/api/contactService.dart';
+import 'package:fluttalor/providers/labelListModel.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
 import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:flutter/material.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class ContactHandlerView extends StatefulWidget {
   static const String id = '/contact_handler';
@@ -21,6 +23,8 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _email = TextEditingController();
 
+  List<dynamic> _labelsList;
+
   bool _formValid = true;
   bool _nullField = false;
 
@@ -34,7 +38,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     _formKey.currentState.validate();
     if (_formValid) {
       ContactService.createContact(_nickname.text, _firstname.text,
-              _lastname.text, _phone.text, _email.text)
+              _lastname.text, _phone.text, _email.text, _labelsList)
           .then((Contact result) {
         if (result != null) {
           print('Submit success');
@@ -49,9 +53,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     } else {
       print('Submit fail');
     }
-    // setState(() {
-    //   _formValid = true;
-    // });
+    setState(() {
+      _formValid = true;
+    });
   }
 
   @override
@@ -145,6 +149,25 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       return 'Email non valide, vous devez avoir un @.';
                     }
                     return null;
+                  },
+                ),
+                MultiSelectFormField(
+                  title: const Text('Tag'),
+                  dataSource: context.watch<LabelList>().getLabelList(),
+                  textField: 'display',
+                  valueField: 'value',
+                  okButtonLabel: 'AJOUT',
+                  cancelButtonLabel: 'ANNULER',
+                  hintWidget:
+                      const Text('Choisissez un tag pour votre contact'),
+                  initialValue: _labelsList,
+                  onSaved: (dynamic value) {
+                    if (value == null) {
+                      return null;
+                    }
+                    setState(() {
+                      _labelsList = value as List<dynamic>;
+                    });
                   },
                 ),
                 const SizedBox(height: 30),

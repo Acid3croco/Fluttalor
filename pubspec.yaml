@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   flutter_secure_storage: ^3.3.5
+  multiselect_formfield: ^0.1.5
   provider: ^4.3.2+2
   http: ^0.12.2
   flutter:
@@ -50,6 +51,7 @@ flutter:
   assets:
     - assets/images/logo_xl.png
     - assets/images/contact_image.png
+    - assets/images/JohnDoe.png
 
   fonts:
     - family: RedHatText

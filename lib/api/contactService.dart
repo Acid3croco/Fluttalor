@@ -56,22 +56,24 @@ class ContactService {
   }
 
   // Create contact.
-  static Future<Contact> createContact(String _nickname, String _firstname,
-      String _lastname, String _phone, String _email) async {
+  static Future<Contact> createContact(
+      String _nickname,
+      String _firstname,
+      String _lastname,
+      String _phone,
+      String _email,
+      List<dynamic> _labels) async {
     const String uri = '$apiUrl/contact/';
     final String accessToken = await _storage.read(key: 'access');
 
-    final dynamic requestBody = <String, String>{
+    final dynamic requestBody = <String, dynamic>{
       'nickname': _nickname,
       'firstname': _firstname,
       'lastname': _lastname,
       'phone': _phone,
-      'email': _email
+      'email': _email,
+      'labels_id': _labels
     };
-
-    if (_nickname != null) {
-      requestBody['nickname'] = _nickname;
-    }
 
     final http.Response response = await http.post(
       uri,
@@ -82,7 +84,7 @@ class ContactService {
       body: json.encode(requestBody),
     );
 
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 201) {
       final dynamic contact = json.decode(response.body);
 
@@ -102,9 +104,25 @@ class ContactService {
   }
 
   // Modify contact from primary key.
-  static Future<bool> modifyContact(String pk) async {
+  static Future<Contact> modifyContact(
+      String pk,
+      String _nickname,
+      String _firstname,
+      String _lastname,
+      String _phone,
+      String _email,
+      List<dynamic> _labels) async {
     final String uri = '$apiUrl/contact/$pk';
     final String accessToken = await _storage.read(key: 'access');
+
+    final dynamic requestBody = <String, dynamic>{
+      'nickname': _nickname,
+      'firstname': _firstname,
+      'lastname': _lastname,
+      'phone': _phone,
+      'email': _email,
+      'labels_id': _labels
+    };
 
     final http.Response response = await http.put(
       uri,
@@ -112,14 +130,26 @@ class ContactService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken'
       },
+      body: json.encode(requestBody),
     );
 
     //print(response.body);
     if (response.statusCode == 200) {
-      return true;
+      final dynamic contact = json.decode(response.body);
+
+      final Contact newContact = Contact(
+          contact['pk'] as int,
+          contact['nickname'] as String,
+          contact['firstname'] as String,
+          contact['lastname'] as String,
+          contact['phone'] as String,
+          contact['email'] as String,
+          contact['icon'] as String,
+          contact['labels'] as List<dynamic>);
+      return newContact;
     }
 
-    return false;
+    return null;
   }
 
   // Remove contact from primary key.

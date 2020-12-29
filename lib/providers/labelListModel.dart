@@ -15,6 +15,17 @@ class LabelList with ChangeNotifier {
     return _labelList.length;
   }
 
+  List<dynamic> getLabelList() {
+    final List<dynamic> labelList = <dynamic>[];
+
+    for (final Label label in _labelList) {
+      labelList
+          .add(<String, dynamic>{'display': label.name, 'value': label.pk});
+    }
+
+    return labelList;
+  }
+
   String getLabelNameFromPk(int pk) {
     for (final Label label in _labelList) {
       if (label.pk == pk) {
