@@ -22,7 +22,7 @@ class _ContactListViewState extends State<ContactListView> {
   Future<bool> getData(BuildContext context) async {
     List<List<dynamic>> results;
 
-    results = await Future.wait([
+    results = await Future.wait(<Future<List<dynamic>>>[
       ContactService.getContacts(),
       LabelService.getLabels(),
     ]);

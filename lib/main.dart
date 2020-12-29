@@ -32,7 +32,7 @@ Future<bool> main() async {
   ]).then((_) {
     runApp(
       MultiProvider(
-        providers: [
+        providers: <ChangeNotifierProvider<dynamic>>[
           // ChangeNotifierProvider(create: (_) => Profile()),
           ChangeNotifierProvider<ContactList>(create: (_) => ContactList()),
           ChangeNotifierProvider<LabelList>(create: (_) => LabelList()),

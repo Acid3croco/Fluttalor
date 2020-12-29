@@ -35,8 +35,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
       _nullField = true;
     }
 
-    _formKey.currentState.validate();
-    if (_formValid) {
+    if (_formKey.currentState.validate()) {
       ContactService.createContact(_nickname.text, _firstname.text,
               _lastname.text, _phone.text, _email.text, _labelsList)
           .then((Contact result) {
