@@ -1,6 +1,9 @@
 import 'package:fluttalor/api/authentificationService.dart';
 import 'package:fluttalor/classes/contact.dart';
+import 'package:fluttalor/classes/label.dart';
+import 'package:fluttalor/utils/colors.dart';
 import 'package:fluttalor/views/authentication/authentication.dart';
+import 'package:fluttalor/views/contact_list/contact_tile.dart';
 import 'package:flutter/material.dart';
 
 class ContactModal extends StatelessWidget {
@@ -23,30 +26,142 @@ class ContactModal extends StatelessWidget {
         ),
       ),
       child: SafeArea(
-        minimum: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        minimum: const EdgeInsets.only(top: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            CircleAvatar(
-              radius: 30,
-              backgroundImage:
-                  contact.icon != null ? NetworkImage(contact.icon) : null,
+            Stack(
+              alignment: Alignment.topCenter,
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 80,
+                  backgroundImage:
+                      contact.icon != null ? NetworkImage(contact.icon) : null,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          ClipOval(
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              child: RawMaterialButton(
+                                onPressed: () => print('biensur'),
+                                child: Icon(
+                                  Icons.edit_outlined,
+                                  size: 28,
+                                  color: myDark,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
-            Text(contact.nickname),
-            Text(contact.firstname),
-            Text(contact.lastname),
-            Text(contact.email),
-            Text(contact.phone),
-            ElevatedButton(
-              child: const Text('Deconnexion'),
-              onPressed: () async {
-                AuthService.logout();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AuthenticationView.id,
-                  (Route<dynamic> route) => false,
-                );
-              },
-            )
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 20,
+                bottom: 10,
+                left: 57,
+                right: 30,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    contact.firstname + contact.nickname + contact.lastname,
+                    style: const TextStyle(
+                      fontSize: 32,
+                    ),
+                  ),
+                  if (contact.labels.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Row(
+                        children: <Widget>[
+                          for (final Label label in contact.labels)
+                            ContactBadge(name: label.name)
+                        ],
+                      ),
+                    )
+                ],
+              ),
+            ),
+            RawMaterialButton(
+              onPressed: () => print('yayy'),
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
+                    ),
+                  ),
+                ),
+                padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+                child: TextFormField(
+                  enabled: false,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.phone_outlined),
+                    labelText: 'Numéro de téléphone',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                  initialValue: contact.phone,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.black12,
+                  ),
+                ),
+              ),
+              child: TextFormField(
+                enabled: false,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.email_outlined),
+                  labelText: 'Email',
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  filled: false,
+                ),
+                initialValue: contact.email,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+              child: TextFormField(
+                enabled: false,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.map_outlined),
+                  labelText: 'Adresse',
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  filled: false,
+                ),
+                // initialValue: contact.address,
+              ),
+            ),
+            // ElevatedButton(
+            //   child: const Text('Deconnexion'),
+            //   onPressed: () async {
+            //     AuthService.logout();
+            //     Navigator.pushNamedAndRemoveUntil(
+            //       context,
+            //       AuthenticationView.id,
+            //       (Route<dynamic> route) => false,
+            //     );
+            //   },
+            // )
           ],
         ),
       ),
