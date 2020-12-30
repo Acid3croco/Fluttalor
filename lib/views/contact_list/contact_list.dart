@@ -68,7 +68,7 @@ class _ContactListViewState extends State<ContactListView> {
             return SmartRefresher(
               key: _refresherKey,
               controller: _refreshController,
-              enablePullUp: true,
+              enablePullDown: true,
               physics: const BouncingScrollPhysics(),
               onRefresh: () async {
                 if (await getData()) {
