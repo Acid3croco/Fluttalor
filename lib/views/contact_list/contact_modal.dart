@@ -37,14 +37,12 @@ class ContactModal extends StatelessWidget {
   }
 
   Future<void> _launchPhone() async {
-    // final String url = 'tel:${contact.phone}';
-    const String url =
-        'mailto:smith@example.org?subject=News&body=New%20plugin';
+    final String url = 'tel:${contact.phone}';
 
-    // if (contact.phone.isEmpty) {
-    //   print('No phone number provided');
-    //   return;
-    // }
+    if (contact.phone.isEmpty) {
+      print('No phone number provided');
+      return;
+    }
     if (await canLaunch(url)) {
       await launch(url);
     } else {
