@@ -155,7 +155,7 @@ class ContactService {
   }
 
   // Remove contact from primary key.
-  static Future<bool> removeContact(String pk) async {
+  static Future<bool> removeContact(int pk) async {
     final String uri = '$apiUrl/contact/$pk/';
     final String accessToken = await _storage.read(key: 'access');
 
@@ -167,7 +167,7 @@ class ContactService {
       },
     );
 
-    //print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       return true;
     }

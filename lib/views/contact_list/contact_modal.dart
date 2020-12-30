@@ -1,4 +1,7 @@
+import 'package:fluttalor/api/contactService.dart';
+import 'package:fluttalor/providers/contactListModel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 
 import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/views/contact_handler/contact_handler.dart';
@@ -97,6 +100,26 @@ class ContactModal extends StatelessWidget {
                                 },
                                 child: Icon(
                                   Icons.edit_outlined,
+                                  size: 28,
+                                  color: myDark,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ClipOval(
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              child: RawMaterialButton(
+                                onPressed: () {
+                                  ContactService.removeContact(contact.pk);
+                                  context
+                                      .read<ContactList>()
+                                      .removeContact(contact);
+                                  Navigator.pop(context);
+                                },
+                                child: Icon(
+                                  Icons.delete_forever_outlined,
                                   size: 28,
                                   color: myDark,
                                 ),
