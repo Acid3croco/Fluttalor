@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class ContactHandlerView extends StatefulWidget {
-  const ContactHandlerView({Key key, this.contact}) : super(key: key);
+  const ContactHandlerView({
+    Key key,
+    @required this.contact,
+  }) : super(key: key);
 
   final Contact contact;
 
@@ -41,7 +44,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
         .then((Contact result) {
       if (result != null) {
         print('Submit success');
-        _formKey.currentState.reset();
+        // _formKey.currentState.reset();
         context.read<ContactList>().addContact(result);
         Navigator.pop(context);
       } else {
@@ -56,7 +59,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
             _lastname.text, _phone.text, _email.text, _labelsList)
         .then((Contact result) {
       if (result != null) {
-        _formKey.currentState.reset();
+        // _formKey.currentState.reset();
         context.read<ContactList>().modifyContact();
         Navigator.pop(context);
       } else {
@@ -73,52 +76,54 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
       _nullField = true;
     }
 
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate() && !_nullField) {
       if (_modify)
         _modifyContact();
       else
         _createContact();
     } else {
-      print('validate fail');
+      print('validate fail: $_nullField');
     }
     setState(() {
-      _formValid = true;
+      _nullField = false;
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    String nicknameInit = '';
+    String firstnameInit = '';
+    String lastnameInit = '';
+    String phoneInit = '';
+    String emailInit = '';
+
+    List<dynamic> labelsListInit = <dynamic>[];
+
+    contact = widget.contact;
+
+    if (contact != null) {
+      nicknameInit = contact.nickname;
+      firstnameInit = contact.firstname;
+      lastnameInit = contact.lastname;
+      phoneInit = contact.phone;
+      emailInit = contact.email;
+      labelsListInit = contact.getLabelsPk();
+      _modify = true;
+    }
+
+    _nickname = TextEditingController(text: nicknameInit);
+    _firstname = TextEditingController(text: firstnameInit);
+    _lastname = TextEditingController(text: lastnameInit);
+    _phone = TextEditingController(text: phoneInit);
+    _email = TextEditingController(text: emailInit);
+
+    _labelsListInit = labelsListInit;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    setState(() {
-      final dynamic args = ModalRoute.of(context).settings.arguments;
-
-      String nicknameInit = '';
-      String firstnameInit = '';
-      String lastnameInit = '';
-      String phoneInit = '';
-      String emailInit = '';
-
-      List<dynamic> labelsListInit = <dynamic>[];
-
-      if (args != null && args['contact'] != null) {
-        contact = args['contact'] as Contact;
-        nicknameInit = contact.nickname;
-        firstnameInit = contact.firstname;
-        lastnameInit = contact.lastname;
-        phoneInit = contact.phone;
-        emailInit = contact.email;
-        labelsListInit = contact.getLabelsPk();
-        _modify = true;
-      }
-
-      _nickname = TextEditingController(text: nicknameInit);
-      _firstname = TextEditingController(text: firstnameInit);
-      _lastname = TextEditingController(text: lastnameInit);
-      _phone = TextEditingController(text: phoneInit);
-      _email = TextEditingController(text: emailInit);
-
-      _labelsListInit = labelsListInit;
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: _modify ? const Text('Modification') : const Text('Ajout'),
@@ -173,9 +178,6 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       border: OutlineInputBorder()),
                   validator: (String value) {
                     if (_nullField) {
-                      setState(() {
-                        _nullField = false;
-                      });
                       return "Vous devez remplir au moins l'un de ses champs.";
                     }
                     return null;
@@ -190,9 +192,6 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                   keyboardType: TextInputType.number,
                   validator: (String value) {
                     if (value.isNotEmpty && value.length < 5) {
-                      setState(() {
-                        _formValid = false;
-                      });
                       return 'Un numéro de telephone dois avoir au minimum 5 nombres.';
                     }
                     return null;
@@ -238,4 +237,10 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
       ),
     );
   }
+}
+
+class ContactHandlerArguments {
+  ContactHandlerArguments(this.contact);
+
+  final Contact contact;
 }

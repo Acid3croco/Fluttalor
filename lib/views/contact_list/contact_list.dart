@@ -105,7 +105,7 @@ class _ContactListViewState extends State<ContactListView> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(15),
         child: Transform.scale(
-          scale: 1.2,
+          scale: 1.15,
           child: FloatingActionButton(
             onPressed: () =>
                 Navigator.pushNamed(context, ContactHandlerView.id),
