@@ -93,4 +93,14 @@ class Contact {
       }
     }
   }
+
+  List<int> getLabelsPk() {
+    final List<int> labelList = <int>[];
+
+    for (final Label label in _labels) {
+      labelList.add(label.pk);
+    }
+
+    return labelList;
+  }
 }

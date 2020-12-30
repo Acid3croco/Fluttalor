@@ -1,6 +1,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:fluttalor/classes/contact.dart';
+import 'package:fluttalor/views/contact_handler/contact_handler.dart';
 import 'package:fluttalor/classes/label.dart';
 import 'package:fluttalor/utils/colors.dart';
 import 'package:fluttalor/views/contact_list/contact_tile.dart';
@@ -35,7 +36,7 @@ class ContactModal extends StatelessWidget {
     return name;
   }
 
-  void _launchPhone() async {
+  Future<void> _launchPhone() async {
     // final String url = 'tel:${contact.phone}';
     const String url =
         'mailto:smith@example.org?subject=News&body=New%20plugin';
@@ -87,7 +88,13 @@ class ContactModal extends StatelessWidget {
                               width: 40,
                               height: 40,
                               child: RawMaterialButton(
-                                onPressed: () => print('biensur'),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, ContactHandlerView.id,
+                                      arguments: <String, Contact>{
+                                        'contact': contact
+                                      });
+                                },
                                 child: Icon(
                                   Icons.edit_outlined,
                                   size: 28,
@@ -188,17 +195,6 @@ class ContactModal extends StatelessWidget {
                 // initialValue: contact.address,
               ),
             ),
-            // ElevatedButton(
-            //   child: const Text('Deconnexion'),
-            //   onPressed: () async {
-            //     AuthService.logout();
-            //     Navigator.pushNamedAndRemoveUntil(
-            //       context,
-            //       AuthenticationView.id,
-            //       (Route<dynamic> route) => false,
-            //     );
-            //   },
-            // )
           ],
         ),
       ),

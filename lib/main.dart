@@ -81,7 +81,8 @@ class MyApp extends StatelessWidget {
       home: _defaultHome,
       routes: <String, WidgetBuilder>{
         ContactListView.id: (BuildContext context) => ContactListView(),
-        ContactHandlerView.id: (BuildContext context) => ContactHandlerView(),
+        ContactHandlerView.id: (BuildContext context) =>
+            const ContactHandlerView(),
         LoginView.id: (BuildContext context) => LoginView(),
         SignupView.id: (BuildContext context) => SignupView(),
         AuthenticationView.id: (BuildContext context) => AuthenticationView(),

@@ -3,11 +3,15 @@ import 'package:fluttalor/providers/labelListModel.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
-import 'package:fluttalor/utils/custom_shadows.dart';
+// import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class ContactHandlerView extends StatefulWidget {
+  const ContactHandlerView({Key key, this.contact}) : super(key: key);
+
+  final Contact contact;
+
   static const String id = '/contact_handler';
 
   @override
@@ -15,15 +19,18 @@ class ContactHandlerView extends StatefulWidget {
 }
 
 class _ContactHandlerViewState extends State<ContactHandlerView> {
+  Contact contact;
+  bool _modify = false;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nickname = TextEditingController();
-  final TextEditingController _firstname = TextEditingController();
-  final TextEditingController _lastname = TextEditingController();
-  final TextEditingController _phone = TextEditingController();
-  final TextEditingController _email = TextEditingController();
+  TextEditingController _nickname;
+  TextEditingController _firstname;
+  TextEditingController _lastname;
+  TextEditingController _phone;
+  TextEditingController _email;
 
-  List<dynamic> _labelsList;
+  List<int> _labelsList = <int>[];
 
   bool _formValid = true;
   bool _nullField = false;
@@ -59,15 +66,47 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      final dynamic args = ModalRoute.of(context).settings.arguments;
+
+      String nicknameInit = '';
+      String firstnameInit = '';
+      String lastnameInit = '';
+      String phoneInit = '';
+      String emailInit = '';
+
+      List<int> labelsListInit = <int>[];
+
+      if (args != null && args['contact'] != null) {
+        contact = args['contact'] as Contact;
+        nicknameInit = contact.nickname;
+        firstnameInit = contact.firstname;
+        lastnameInit = contact.lastname;
+        phoneInit = contact.phone;
+        emailInit = contact.email;
+        labelsListInit = contact.getLabelsPk();
+        _modify = true;
+      }
+
+      _nickname = TextEditingController(text: nicknameInit);
+      _firstname = TextEditingController(text: firstnameInit);
+      _lastname = TextEditingController(text: lastnameInit);
+      _phone = TextEditingController(text: phoneInit);
+      _email = TextEditingController(text: emailInit);
+
+      _labelsList = labelsListInit;
+    });
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add'),
+        title: _modify ? const Text('Modification') : const Text('Ajout'),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: const Icon(Icons.check)),
+              onTap: _submit,
+              child: const Icon(Icons.check),
+            ),
           )
         ],
       ),
@@ -165,20 +204,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       return null;
                     }
                     setState(() {
-                      _labelsList = value as List<dynamic>;
+                      _labelsList = value as List<int>;
                     });
                   },
-                ),
-                const SizedBox(height: 30),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: _submit,
-                    child: const Text('Ajouter contact'),
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    boxShadow: customShadow[1],
-                  ),
                 ),
               ],
             ),

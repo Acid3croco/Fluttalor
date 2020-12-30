@@ -24,7 +24,7 @@ class ContactService {
       },
     );
 
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> contactList =
           json.decode(response.body) as List<dynamic>;
