@@ -43,7 +43,7 @@ class ContactList with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteContact(Contact contact) {
+  void removeContact(Contact contact) {
     _contactList.remove(contact);
     notifyListeners();
   }
