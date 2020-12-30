@@ -126,7 +126,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: _modify ? const Text('Modification') : const Text('Ajout'),
+        title: _modify
+            ? const Text('Modifier contact')
+            : const Text('Ajouter un contact'),
         leadingWidth: 60,
         actions: <Widget>[
           Padding(
