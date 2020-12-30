@@ -1,8 +1,8 @@
-import 'package:fluttalor/api/authentificationService.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/classes/label.dart';
 import 'package:fluttalor/utils/colors.dart';
-import 'package:fluttalor/views/authentication/authentication.dart';
 import 'package:fluttalor/views/contact_list/contact_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +13,43 @@ class ContactModal extends StatelessWidget {
   }) : super(key: key);
 
   final Contact contact;
+
+  String _buildContactName() {
+    String name = '';
+
+    if (contact.firstname.isNotEmpty) {
+      name += contact.firstname;
+    }
+    if (contact.nickname.isNotEmpty) {
+      if (name.isNotEmpty) {
+        name += ' ';
+      }
+      name += contact.nickname;
+    }
+    if (contact.lastname.isNotEmpty) {
+      if (name.isNotEmpty) {
+        name += ' ';
+      }
+      name += contact.lastname;
+    }
+    return name;
+  }
+
+  void _launchPhone() async {
+    // final String url = 'tel:${contact.phone}';
+    const String url =
+        'mailto:smith@example.org?subject=News&body=New%20plugin';
+
+    // if (contact.phone.isEmpty) {
+    //   print('No phone number provided');
+    //   return;
+    // }
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +106,7 @@ class ContactModal extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(
                 top: 20,
-                bottom: 10,
+                bottom: 0,
                 left: 57,
                 right: 30,
               ),
@@ -77,14 +114,14 @@ class ContactModal extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    contact.firstname + contact.nickname + contact.lastname,
+                    _buildContactName(),
                     style: const TextStyle(
                       fontSize: 32,
                     ),
                   ),
                   if (contact.labels.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
                         children: <Widget>[
                           for (final Label label in contact.labels)
@@ -96,7 +133,7 @@ class ContactModal extends StatelessWidget {
               ),
             ),
             RawMaterialButton(
-              onPressed: () => print('yayy'),
+              onPressed: () => _launchPhone(),
               child: Container(
                 decoration: const BoxDecoration(
                   border: Border(
