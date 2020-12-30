@@ -30,7 +30,7 @@ class ContactTile extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.w500),
             )
           : const Text(''),
-      subtitle: (contact.labels.isNotEmpty)
+      subtitle: (contact != null && contact.labels.isNotEmpty)
           ? Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Row(

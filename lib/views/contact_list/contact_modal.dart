@@ -87,11 +87,13 @@ class ContactModal extends StatelessWidget {
                               height: 40,
                               child: RawMaterialButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, ContactHandlerView.id,
-                                      arguments: <String, Contact>{
-                                        'contact': contact
-                                      });
+                                  Navigator.popAndPushNamed(
+                                    context,
+                                    ContactHandlerView.id,
+                                    arguments: <String, Contact>{
+                                      'contact': contact
+                                    },
+                                  );
                                 },
                                 child: Icon(
                                   Icons.edit_outlined,

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 // import 'dart:convert';
 import 'package:fluttalor/.env.dart';
+import 'package:fluttalor/api/authentificationService.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -28,6 +29,8 @@ class LabelService {
       final List<dynamic> labelList =
           json.decode(response.body) as List<dynamic>;
       return labelList;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return null;
@@ -49,6 +52,8 @@ class LabelService {
     //print(response.body);
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return false;
@@ -70,6 +75,8 @@ class LabelService {
     //print(response.body);
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return false;
@@ -91,6 +98,8 @@ class LabelService {
     //print(response.body);
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return false;
@@ -112,6 +121,8 @@ class LabelService {
     //print(response.body);
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return false;

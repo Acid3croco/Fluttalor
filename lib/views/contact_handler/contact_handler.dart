@@ -3,7 +3,6 @@ import 'package:fluttalor/providers/labelListModel.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
-// import 'package:fluttalor/utils/custom_shadows.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
@@ -31,6 +30,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   TextEditingController _email;
 
   List<dynamic> _labelsList = <dynamic>[];
+  List<dynamic> _labelsListInit;
 
   bool _formValid = true;
   bool _nullField = false;
@@ -56,7 +56,6 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
             _lastname.text, _phone.text, _email.text, _labelsList)
         .then((Contact result) {
       if (result != null) {
-        print('Submit success');
         _formKey.currentState.reset();
         context.read<ContactList>().modifyContact();
         Navigator.pop(context);
@@ -68,9 +67,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   }
 
   void _submit() {
-    if (_nickname.text == null &&
-        _firstname.text == null &&
-        _lastname.text == null) {
+    if ((_nickname.text == null || _nickname.text == '') &&
+        (_firstname.text == null || _firstname.text == '') &&
+        (_lastname.text == null || _lastname.text == '')) {
       _nullField = true;
     }
 
@@ -80,7 +79,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
       else
         _createContact();
     } else {
-      print('Submit fail');
+      print('validate fail');
     }
     setState(() {
       _formValid = true;
@@ -117,7 +116,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
       _phone = TextEditingController(text: phoneInit);
       _email = TextEditingController(text: emailInit);
 
-      _labelsList = labelsListInit;
+      _labelsListInit = labelsListInit;
     });
 
     return Scaffold(
@@ -222,7 +221,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                   cancelButtonLabel: 'ANNULER',
                   hintWidget:
                       const Text('Choisissez un tag pour votre contact'),
-                  initialValue: _labelsList,
+                  initialValue: _labelsListInit,
                   onSaved: (dynamic value) {
                     if (value == null) {
                       return null;

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 // import 'dart:convert';
 import 'package:fluttalor/.env.dart';
+import 'package:fluttalor/api/authentificationService.dart';
 import 'package:fluttalor/classes/contact.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,6 +30,8 @@ class ContactService {
       final List<dynamic> contactList =
           json.decode(response.body) as List<dynamic>;
       return contactList;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return null;
@@ -50,6 +53,8 @@ class ContactService {
     //print(response.body);
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return false;
@@ -65,6 +70,8 @@ class ContactService {
       List<dynamic> _labels) async {
     const String uri = '$apiUrl/contact/';
     final String accessToken = await _storage.read(key: 'access');
+
+    _labels ??= <dynamic>[];
 
     final dynamic requestBody = <String, dynamic>{
       'nickname': _nickname,
@@ -98,6 +105,8 @@ class ContactService {
           contact['icon'] as String,
           contact['labels'] as List<dynamic>);
       return newContact;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return null;
@@ -116,6 +125,8 @@ class ContactService {
     final String uri = '$apiUrl/contact/$pk/';
     final String accessToken = await _storage.read(key: 'access');
 
+    _labels ??= <dynamic>[];
+
     final dynamic requestBody = <String, dynamic>{
       'nickname': _nickname,
       'firstname': _firstname,
@@ -125,6 +136,7 @@ class ContactService {
       'labels_id': _labels
     };
 
+    print(json.encode(requestBody));
     final http.Response response = await http.put(
       uri,
       headers: <String, String>{
@@ -134,7 +146,7 @@ class ContactService {
       body: json.encode(requestBody),
     );
 
-    // print(response.body);
+    print(response.body);
     if (response.statusCode == 200) {
       final dynamic contactRet = json.decode(response.body);
 
@@ -149,6 +161,8 @@ class ContactService {
       contact.setLabel(contactRet['labels'] as List<dynamic>);
 
       return contact;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return null;
@@ -170,6 +184,8 @@ class ContactService {
     // print(response.body);
     if (response.statusCode == 200) {
       return true;
+    } else if (response.statusCode == 401) {
+      AuthService.refreshToken();
     }
 
     return false;
