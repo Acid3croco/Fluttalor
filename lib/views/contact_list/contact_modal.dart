@@ -21,20 +21,17 @@ class ContactModal extends StatelessWidget {
   String _buildContactName() {
     String name = '';
 
-    if (contact.firstname.isNotEmpty) {
-      name += contact.firstname;
-    }
-    if (contact.nickname.isNotEmpty) {
-      if (name.isNotEmpty) {
-        name += ' ';
+    for (final String tmp in <String>[
+      contact.firstname,
+      contact.nickname,
+      contact.lastname
+    ]) {
+      if (tmp.isNotEmpty) {
+        if (name.isNotEmpty) {
+          name += ' ';
+        }
+        name += tmp;
       }
-      name += contact.nickname;
-    }
-    if (contact.lastname.isNotEmpty) {
-      if (name.isNotEmpty) {
-        name += ' ';
-      }
-      name += contact.lastname;
     }
     return name;
   }

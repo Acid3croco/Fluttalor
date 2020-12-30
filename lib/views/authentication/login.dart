@@ -54,7 +54,8 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       body: SafeArea(
         minimum: const EdgeInsets.all(20),
-        child: Container(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[

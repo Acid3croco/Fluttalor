@@ -53,6 +53,7 @@ class _ContactListViewState extends State<ContactListView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contacts'),
+        titleSpacing: 20,
         actions: const <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 20),
@@ -101,9 +102,19 @@ class _ContactListViewState extends State<ContactListView> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, ContactHandlerView.id),
-        child: const Icon(Icons.add),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Transform.scale(
+          scale: 1.2,
+          child: FloatingActionButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, ContactHandlerView.id),
+            child: const Icon(
+              Icons.add,
+              size: 40,
+            ),
+          ),
+        ),
       ),
     );
   }

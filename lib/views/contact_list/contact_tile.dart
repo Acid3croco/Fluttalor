@@ -24,24 +24,23 @@ class ContactTile extends StatelessWidget {
           backgroundImage: (contact != null && contact.icon != null)
               ? NetworkImage(contact.icon)
               : null),
-      title: Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: (contact != null)
-            ? Text(
-                '${contact.nickname} ${contact.firstname} ${contact.lastname}',
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              )
-            : const Text(''),
-      ),
-      subtitle: Row(
-        children: <Widget>[
-          if (contact != null && contact.labels.isNotEmpty)
-            for (final Label label in contact.labels)
-              ContactBadge(name: label.name)
-          else
-            Container(),
-        ],
-      ),
+      title: (contact != null)
+          ? Text(
+              '${contact.nickname} ${contact.firstname} ${contact.lastname}',
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            )
+          : const Text(''),
+      subtitle: (contact.labels.isNotEmpty)
+          ? Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Row(
+                children: <Widget>[
+                  for (final Label label in contact.labels)
+                    ContactBadge(name: label.name)
+                ],
+              ),
+            )
+          : null,
       onTap: () => <void>{
         showModalBottomSheet<Widget>(
           context: context,

@@ -123,6 +123,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     return Scaffold(
       appBar: AppBar(
         title: _modify ? const Text('Modification') : const Text('Ajout'),
+        leadingWidth: 60,
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 20),

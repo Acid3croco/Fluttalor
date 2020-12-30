@@ -55,7 +55,8 @@ class _SignupViewState extends State<SignupView> {
     return Scaffold(
       body: SafeArea(
         minimum: const EdgeInsets.all(20),
-        child: Container(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
