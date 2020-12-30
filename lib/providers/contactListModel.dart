@@ -39,8 +39,7 @@ class ContactList with ChangeNotifier {
     notifyListeners();
   }
 
-  void modifyContact(Contact contact, Map<String, String> newInfo) {
-    contact.modifyContact(newInfo);
+  void modifyContact() {
     notifyListeners();
   }
 

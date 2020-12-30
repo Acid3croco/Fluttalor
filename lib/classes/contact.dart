@@ -3,14 +3,14 @@ import 'package:fluttalor/classes/label.dart';
 class Contact {
   Contact(int pk, String nickname, String firstname, String lastname,
       String phone, String email, String icon, List<dynamic> labels) {
-    final List<Label> labelList = <Label>[];
+    // final List<Label> labelList = <Label>[];
 
-    for (final dynamic label in labels) {
-      labelList.add(Label(
-        label['pk'] as int,
-        label['name'] as String,
-      ));
-    }
+    // for (final dynamic label in labels) {
+    //   labelList.add(Label(
+    //     label['pk'] as int,
+    //     label['name'] as String,
+    //   ));
+    // }
 
     _pk = pk;
     _nickname = nickname;
@@ -19,7 +19,8 @@ class Contact {
     _phone = phone;
     _email = email;
     _icon = icon;
-    _labels = labelList;
+    setLabel(labels);
+    // _labels = labelList;
   }
 
   int _pk;
@@ -82,20 +83,21 @@ class Contact {
     });
   }
 
-  void addLabel(Label label) {
-    _labels.add(label);
-  }
+  void setLabel(List<dynamic> labels) {
+    final List<Label> labelList = <Label>[];
 
-  void removeLabel(int labelPk) {
-    for (final Label label in _labels) {
-      if (label.pk == labelPk) {
-        _labels.remove(label);
-      }
+    for (final dynamic label in labels) {
+      labelList.add(Label(
+        label['pk'] as int,
+        label['name'] as String,
+      ));
     }
+
+    _labels = labelList;
   }
 
-  List<int> getLabelsPk() {
-    final List<int> labelList = <int>[];
+  List<dynamic> getLabelsPk() {
+    final List<dynamic> labelList = <dynamic>[];
 
     for (final Label label in _labels) {
       labelList.add(label.pk);

@@ -30,10 +30,42 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   TextEditingController _phone;
   TextEditingController _email;
 
-  List<int> _labelsList = <int>[];
+  List<dynamic> _labelsList = <dynamic>[];
 
   bool _formValid = true;
   bool _nullField = false;
+
+  void _createContact() {
+    ContactService.createContact(_nickname.text, _firstname.text,
+            _lastname.text, _phone.text, _email.text, _labelsList)
+        .then((Contact result) {
+      if (result != null) {
+        print('Submit success');
+        _formKey.currentState.reset();
+        context.read<ContactList>().addContact(result);
+        Navigator.pop(context);
+      } else {
+        _formKey.currentState.validate();
+        print('Submit fail');
+      }
+    });
+  }
+
+  void _modifyContact() {
+    ContactService.modifyContact(contact, _nickname.text, _firstname.text,
+            _lastname.text, _phone.text, _email.text, _labelsList)
+        .then((Contact result) {
+      if (result != null) {
+        print('Submit success');
+        _formKey.currentState.reset();
+        context.read<ContactList>().modifyContact();
+        Navigator.pop(context);
+      } else {
+        _formKey.currentState.validate();
+        print('Submit fail');
+      }
+    });
+  }
 
   void _submit() {
     if (_nickname.text == null &&
@@ -43,19 +75,10 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     }
 
     if (_formKey.currentState.validate()) {
-      ContactService.createContact(_nickname.text, _firstname.text,
-              _lastname.text, _phone.text, _email.text, _labelsList)
-          .then((Contact result) {
-        if (result != null) {
-          print('Submit success');
-          _formKey.currentState.reset();
-          context.read<ContactList>().addContact(result);
-          Navigator.pop(context);
-        } else {
-          _formKey.currentState.validate();
-          print('Submit fail');
-        }
-      });
+      if (_modify)
+        _modifyContact();
+      else
+        _createContact();
     } else {
       print('Submit fail');
     }
@@ -75,7 +98,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
       String phoneInit = '';
       String emailInit = '';
 
-      List<int> labelsListInit = <int>[];
+      List<dynamic> labelsListInit = <dynamic>[];
 
       if (args != null && args['contact'] != null) {
         contact = args['contact'] as Contact;
@@ -166,7 +189,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       border: OutlineInputBorder()),
                   keyboardType: TextInputType.number,
                   validator: (String value) {
-                    if (value.length < 5) {
+                    if (value.isNotEmpty && value.length < 5) {
                       setState(() {
                         _formValid = false;
                       });
@@ -204,7 +227,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                       return null;
                     }
                     setState(() {
-                      _labelsList = value as List<int>;
+                      _labelsList = value as List<dynamic>;
                     });
                   },
                 ),
