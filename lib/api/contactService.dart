@@ -36,7 +36,7 @@ class ContactService {
 
   // Retrieve contact from primary key.
   static Future<bool> getContact(String pk) async {
-    final String uri = '$apiUrl/contact/$pk';
+    final String uri = '$apiUrl/contact/$pk/';
     final String accessToken = await _storage.read(key: 'access');
 
     final http.Response response = await http.get(
@@ -105,14 +105,15 @@ class ContactService {
 
   // Modify contact from primary key.
   static Future<Contact> modifyContact(
-      String pk,
+      Contact contact,
       String _nickname,
       String _firstname,
       String _lastname,
       String _phone,
       String _email,
       List<dynamic> _labels) async {
-    final String uri = '$apiUrl/contact/$pk';
+    final int pk = contact.pk;
+    final String uri = '$apiUrl/contact/$pk/';
     final String accessToken = await _storage.read(key: 'access');
 
     final dynamic requestBody = <String, dynamic>{
@@ -133,20 +134,21 @@ class ContactService {
       body: json.encode(requestBody),
     );
 
-    //print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
-      final dynamic contact = json.decode(response.body);
+      final dynamic contactRet = json.decode(response.body);
 
-      final Contact newContact = Contact(
-          contact['pk'] as int,
-          contact['nickname'] as String,
-          contact['firstname'] as String,
-          contact['lastname'] as String,
-          contact['phone'] as String,
-          contact['email'] as String,
-          contact['icon'] as String,
-          contact['labels'] as List<dynamic>);
-      return newContact;
+      contact.modifyContact(<String, String>{
+        'nickname': contactRet['nickname'] as String,
+        'firstname': contactRet['firstname'] as String,
+        'lastname': contactRet['lastname'] as String,
+        'phone': contactRet['phone'] as String,
+        'email': contactRet['email'] as String,
+        'icon': contactRet['icon'] as String,
+      });
+      contact.setLabel(contactRet['labels'] as List<dynamic>);
+
+      return contact;
     }
 
     return null;
@@ -154,7 +156,7 @@ class ContactService {
 
   // Remove contact from primary key.
   static Future<bool> removeContact(String pk) async {
-    final String uri = '$apiUrl/contact/$pk';
+    final String uri = '$apiUrl/contact/$pk/';
     final String accessToken = await _storage.read(key: 'access');
 
     final http.Response response = await http.delete(
