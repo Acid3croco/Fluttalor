@@ -1,14 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:fluttalor/utils/colors.dart';
+import 'package:fluttalor/classes/label.dart';
+import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/api/contactService.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
-
-import 'package:fluttalor/classes/contact.dart';
-import 'package:fluttalor/views/contact_handler/contact_handler.dart';
-import 'package:fluttalor/classes/label.dart';
-import 'package:fluttalor/utils/colors.dart';
 import 'package:fluttalor/views/contact_list/contact_tile.dart';
-import 'package:flutter/material.dart';
+import 'package:fluttalor/views/contact_handler/contact_handler.dart';
 
 class ContactModal extends StatelessWidget {
   const ContactModal({
@@ -36,6 +38,14 @@ class ContactModal extends StatelessWidget {
     return name;
   }
 
+  Future<void> _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Future<void> _launchPhone() async {
     final String url = 'tel:${contact.phone}';
 
@@ -43,10 +53,24 @@ class ContactModal extends StatelessWidget {
       print('No phone number provided');
       return;
     }
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+    try {
+      await _launchUrl(url);
+    } catch (e) {
+      print('error in _launchPhone: $e');
+    }
+  }
+
+  Future<void> _launchEmail() async {
+    final String url = 'mailto:${contact.email}';
+
+    if (contact.email.isEmpty) {
+      print('No email provided');
+      return;
+    }
+    try {
+      await _launchUrl(url);
+    } catch (e) {
+      print('error in _launchEmail: $e');
     }
   }
 
@@ -63,158 +87,171 @@ class ContactModal extends StatelessWidget {
       ),
       child: SafeArea(
         minimum: const EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 80,
-                  backgroundImage:
-                      contact.icon != null ? NetworkImage(contact.icon) : null,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          ClipOval(
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              child: RawMaterialButton(
-                                onPressed: () {
-                                  Navigator.popAndPushNamed(
-                                      context, ContactHandlerView.id,
-                                      arguments:
-                                          ContactHandlerArguments(contact));
-                                },
-                                child: Icon(
-                                  Icons.edit_outlined,
-                                  size: 28,
-                                  color: myBlue,
-                                ),
-                              ),
-                            ),
-                          ),
-                          ClipOval(
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              child: RawMaterialButton(
-                                onPressed: () {
-                                  _showMaterialDialog(context, contact);
-                                },
-                                child: Icon(
-                                  Icons.delete_forever_outlined,
-                                  size: 28,
-                                  color: myRed,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
-                bottom: 0,
-                left: 57,
-                right: 30,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Stack(
+                alignment: Alignment.topCenter,
                 children: <Widget>[
-                  Text(
-                    _buildContactName(),
-                    style: const TextStyle(
-                      fontSize: 32,
-                    ),
+                  CircleAvatar(
+                    radius: 80,
+                    backgroundImage: contact.icon != null
+                        ? NetworkImage(contact.icon)
+                        : null,
                   ),
-                  if (contact.labels.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        children: <Widget>[
-                          for (final Label label in contact.labels)
-                            ContactBadge(name: label.name)
-                        ],
-                      ),
-                    )
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            ClipOval(
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    Navigator.popAndPushNamed(
+                                        context, ContactHandlerView.id,
+                                        arguments:
+                                            ContactHandlerArguments(contact));
+                                  },
+                                  child: Icon(
+                                    Icons.edit_outlined,
+                                    size: 28,
+                                    color: myBlue,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ClipOval(
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    _showMaterialDialog(context, contact);
+                                  },
+                                  child: Icon(
+                                    Icons.delete_forever_outlined,
+                                    size: 28,
+                                    color: myRed,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
-            ),
-            RawMaterialButton(
-              onPressed: () => _launchPhone(),
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.black12,
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  bottom: 0,
+                  left: 57,
+                  right: 30,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      _buildContactName(),
+                      style: const TextStyle(
+                        fontSize: 32,
+                      ),
+                    ),
+                    if (contact.labels.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          children: <Widget>[
+                            for (final Label label in contact.labels)
+                              ContactBadge(name: label.name)
+                          ],
+                        ),
+                      )
+                  ],
+                ),
+              ),
+              RawMaterialButton(
+                onPressed: () => _launchPhone(),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.black12,
+                      ),
                     ),
                   ),
-                ),
-                padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                child: TextFormField(
-                  enabled: false,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.phone_outlined),
-                    labelText: 'Numéro de téléphone',
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    filled: false,
-                  ),
-                  initialValue: contact.phone,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.black12,
+                  padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+                  child: TextFormField(
+                    enabled: false,
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.phone_outlined),
+                      labelText: 'Numéro de téléphone',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      filled: false,
+                    ),
+                    initialValue: contact.phone,
                   ),
                 ),
               ),
-              child: TextFormField(
-                enabled: false,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.email_outlined),
-                  labelText: 'Email',
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  filled: false,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
+              RawMaterialButton(
+                onPressed: () => _launchEmail(),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.black12,
+                      ),
+                    ),
+                  ),
+                  child: TextFormField(
+                    enabled: false,
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.email_outlined),
+                      labelText: 'Email',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      filled: false,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    initialValue: contact.email,
                   ),
                 ),
-                initialValue: contact.email,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-              child: TextFormField(
-                enabled: false,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.map_outlined),
-                  labelText: 'Adresse',
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  filled: false,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
+              RawMaterialButton(
+                onPressed: () =>
+                    Clipboard.setData(ClipboardData(text: contact.address)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+                  child: TextFormField(
+                    maxLines: null,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.map_outlined),
+                      labelText: 'Adresse',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      filled: false,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    initialValue: contact.address,
                   ),
                 ),
-                initialValue: contact.address,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -234,7 +271,12 @@ Future<void> _showMaterialDialog(BuildContext context, Contact contact) {
           },
         ),
         FlatButton(
-          child: const Text('Supprimer'),
+          child: Text(
+            'Supprimer',
+            style: TextStyle(
+              color: myRed,
+            ),
+          ),
           onPressed: () {
             ContactService.removeContact(contact.pk);
             context.read<ContactList>().removeContact(contact);

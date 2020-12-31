@@ -1,10 +1,14 @@
+import 'package:flutter/material.dart';
+
+import 'package:geocoder/geocoder.dart';
+import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
+
+import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/api/contactService.dart';
 import 'package:fluttalor/providers/labelListModel.dart';
-import 'package:provider/provider.dart';
-import 'package:fluttalor/classes/contact.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
-import 'package:flutter/material.dart';
-import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class ContactHandlerView extends StatefulWidget {
   const ContactHandlerView({
@@ -102,6 +106,17 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     });
   }
 
+  Future<void> _findAddress() async {
+    final Position position = await Geolocator.getCurrentPosition();
+    final Coordinates coordinates =
+        Coordinates(position.latitude, position.longitude);
+    final List<Address> addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    final Address first = addresses.first;
+
+    _address.text = first.addressLine;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -156,192 +171,204 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
           )
         ],
       ),
-      body: Center(
-        child: Container(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                      ),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
                     ),
                   ),
-                  child: TextFormField(
-                    controller: _firstname,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.people_outlined),
-                      labelText: 'Prénom',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      filled: false,
+                ),
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _firstname,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.people_outlined),
+                    labelText: 'Prénom',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                  validator: (String value) {
+                    if (_nullField) {
+                      return "Vous devez remplir au moins l'un de ces champs.";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
                     ),
-                    validator: (String value) {
-                      if (_nullField) {
-                        return "Vous devez remplir au moins l'un de ces champs.";
-                      }
+                  ),
+                ),
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _nickname,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.people_outlined),
+                    labelText: 'Surnom',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                  validator: (String value) {
+                    if (_nullField) {
+                      return "Vous devez remplir au moins l'un de ces champs.";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
+                    ),
+                  ),
+                ),
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _lastname,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.people_outlined),
+                    labelText: 'Nom de famille',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                  validator: (String value) {
+                    if (_nullField) {
+                      return "Vous devez remplir au moins l'un de ces champs.";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
+                    ),
+                  ),
+                ),
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _phone,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.phone_outlined),
+                    labelText: 'Numéro de téléphone',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (String value) {
+                    if (value.isNotEmpty && value.length < 5) {
+                      return 'Un numéro de telephone dois avoir au minimum 5 nombres.';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
+                    ),
+                  ),
+                ),
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _email,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email_outlined),
+                    labelText: 'Adresse email',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (String value) {
+                    if (value.trim().isNotEmpty && !value.contains('@')) {
+                      return 'Email non valide, vous devez avoir un @.';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
+                    ),
+                  ),
+                ),
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _address,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
+                      Icons.map_outlined,
+                    ),
+                    suffixIcon: ClipOval(
+                      child: GestureDetector(
+                        onTap: () => _findAddress(),
+                        child: const Icon(Icons.my_location),
+                      ),
+                    ),
+                    labelText: 'Adresse postale',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: false,
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                child: MultiSelectFormField(
+                  title: const Text('Tag'),
+                  dataSource: context.watch<LabelList>().getLabelList(),
+                  textField: 'display',
+                  valueField: 'value',
+                  okButtonLabel: 'Ajouter',
+                  cancelButtonLabel: 'Annuler',
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                  hintWidget: const Text(
+                      'Choisissez un ou plusieurs tag pour votre contact'),
+                  initialValue: _labelsListInit,
+                  onSaved: (dynamic value) {
+                    if (value == null) {
                       return null;
-                    },
-                  ),
+                    }
+                    setState(() {
+                      _labelsList = value as List<dynamic>;
+                    });
+                  },
                 ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _nickname,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.people_outlined),
-                      labelText: 'Surnom',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      filled: false,
-                    ),
-                    validator: (String value) {
-                      if (_nullField) {
-                        return "Vous devez remplir au moins l'un de ces champs.";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _lastname,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.people_outlined),
-                      labelText: 'Nom de famille',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      filled: false,
-                    ),
-                    validator: (String value) {
-                      if (_nullField) {
-                        return "Vous devez remplir au moins l'un de ces champs.";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _phone,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.phone_outlined),
-                      labelText: 'Numéro de téléphone',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      filled: false,
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (String value) {
-                      if (value.isNotEmpty && value.length < 5) {
-                        return 'Un numéro de telephone dois avoir au minimum 5 nombres.';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _email,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.email_outlined),
-                      labelText: 'Adresse email',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      filled: false,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (String value) {
-                      if (value.trim().isNotEmpty && !value.contains('@')) {
-                        return 'Email non valide, vous devez avoir un @.';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _address,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.map_outlined),
-                      labelText: 'Adresse postale',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      filled: false,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: MultiSelectFormField(
-                    title: const Text('Tag'),
-                    dataSource: context.watch<LabelList>().getLabelList(),
-                    textField: 'display',
-                    valueField: 'value',
-                    okButtonLabel: 'Ajouter',
-                    cancelButtonLabel: 'Annuler',
-                    border: const OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    hintWidget: const Text(
-                        'Choisissez un ou plusieurs tag pour votre contact'),
-                    initialValue: _labelsListInit,
-                    onSaved: (dynamic value) {
-                      if (value == null) {
-                        return null;
-                      }
-                      setState(() {
-                        _labelsList = value as List<dynamic>;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
