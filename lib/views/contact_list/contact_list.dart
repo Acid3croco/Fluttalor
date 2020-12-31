@@ -10,6 +10,7 @@ import 'package:fluttalor/providers/labelListModel.dart';
 import 'package:fluttalor/providers/contactListModel.dart';
 import 'package:fluttalor/views/contact_list/contact_tile.dart';
 import 'package:fluttalor/views/contact_handler/contact_handler.dart';
+import 'package:fluttalor/utils/custom_shadows.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -65,36 +66,73 @@ class _ContactListViewState extends State<ContactListView> {
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
-            return SmartRefresher(
-              key: _refresherKey,
-              controller: _refreshController,
-              enablePullDown: true,
-              physics: const BouncingScrollPhysics(),
-              onRefresh: () async {
-                if (await getData()) {
-                  _refreshController.refreshCompleted();
-                }
-              },
-              child: ListView.builder(
-                itemCount: context.watch<ContactList>().getLength(),
-                itemBuilder: (BuildContext context, int index) {
-                  final Contact currContact =
-                      context.watch<ContactList>().getContactFromIndex(index);
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                            color: index <
-                                    context.watch<ContactList>().getLength() - 1
-                                ? Colors.black12
-                                : Colors.transparent),
+            final int contactCount = context.watch<ContactList>().getLength();
+
+            if (contactCount > 0) {
+              return SmartRefresher(
+                key: _refresherKey,
+                controller: _refreshController,
+                enablePullDown: true,
+                physics: const BouncingScrollPhysics(),
+                onRefresh: () async {
+                  if (await getData()) {
+                    _refreshController.refreshCompleted();
+                  }
+                },
+                child: ListView.builder(
+                  itemCount: contactCount,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Contact currContact =
+                        context.watch<ContactList>().getContactFromIndex(index);
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                              color: index <
+                                      context.watch<ContactList>().getLength() -
+                                          1
+                                  ? Colors.black12
+                                  : Colors.transparent),
+                        ),
+                      ),
+                      child: ContactTile(contact: currContact),
+                    );
+                  },
+                ),
+              );
+            } else {
+              return Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 3.5,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        "Vous n'avez aucun contact pour le moment",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    child: ContactTile(contact: currContact),
-                  );
-                },
-              ),
-            );
+                    Container(
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, ContactHandlerView.id),
+                        child: const Text('Ajouter un contact'),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: customShadow[1],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
           } else {
             return const Center(
               child: CircularProgressIndicator(),
