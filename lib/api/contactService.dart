@@ -67,6 +67,7 @@ class ContactService {
       String _lastname,
       String _phone,
       String _email,
+      String _address,
       List<dynamic> _labels) async {
     const String uri = '$apiUrl/contact/';
     final String accessToken = await _storage.read(key: 'access');
@@ -79,6 +80,7 @@ class ContactService {
       'lastname': _lastname,
       'phone': _phone,
       'email': _email,
+      'address': _address,
       'labels_id': _labels
     };
 
@@ -102,6 +104,7 @@ class ContactService {
           contact['lastname'] as String,
           contact['phone'] as String,
           contact['email'] as String,
+          contact['address'] as String,
           contact['icon'] as String,
           contact['labels'] as List<dynamic>);
       return newContact;
@@ -120,6 +123,7 @@ class ContactService {
       String _lastname,
       String _phone,
       String _email,
+      String _address,
       List<dynamic> _labels) async {
     final int pk = contact.pk;
     final String uri = '$apiUrl/contact/$pk/';
@@ -133,6 +137,7 @@ class ContactService {
       'lastname': _lastname,
       'phone': _phone,
       'email': _email,
+      'address': _address,
       'labels_id': _labels
     };
 
@@ -156,6 +161,7 @@ class ContactService {
         'lastname': contactRet['lastname'] as String,
         'phone': contactRet['phone'] as String,
         'email': contactRet['email'] as String,
+        'address': contactRet['address'] as String,
         'icon': contactRet['icon'] as String,
       });
       contact.setLabel(contactRet['labels'] as List<dynamic>);

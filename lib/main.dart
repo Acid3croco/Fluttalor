@@ -67,14 +67,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(50),
-            ),
             borderSide: BorderSide.none,
           ),
         ),

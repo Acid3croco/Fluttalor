@@ -1,26 +1,25 @@
 import 'package:fluttalor/classes/label.dart';
 
 class Contact {
-  Contact(int pk, String nickname, String firstname, String lastname,
-      String phone, String email, String icon, List<dynamic> labels) {
-    // final List<Label> labelList = <Label>[];
-
-    // for (final dynamic label in labels) {
-    //   labelList.add(Label(
-    //     label['pk'] as int,
-    //     label['name'] as String,
-    //   ));
-    // }
-
+  Contact(
+      int pk,
+      String nickname,
+      String firstname,
+      String lastname,
+      String phone,
+      String email,
+      String address,
+      String icon,
+      List<dynamic> labels) {
     _pk = pk;
     _nickname = nickname;
     _firstname = firstname;
     _lastname = lastname;
     _phone = phone;
     _email = email;
+    _address = address;
     _icon = icon;
     setLabel(labels);
-    // _labels = labelList;
   }
 
   int _pk;
@@ -29,6 +28,7 @@ class Contact {
   String _lastname;
   String _phone;
   String _email;
+  String _address;
   String _icon;
   List<Label> _labels;
 
@@ -38,6 +38,7 @@ class Contact {
   String get lastname => _lastname;
   String get phone => _phone;
   String get email => _email;
+  String get address => _address;
   String get icon => _icon;
   List<Label> get labels => _labels;
 
@@ -67,6 +68,11 @@ class Contact {
         case 'email':
           {
             _email = value;
+          }
+          break;
+        case 'address':
+          {
+            _address = value;
           }
           break;
         case 'icon':

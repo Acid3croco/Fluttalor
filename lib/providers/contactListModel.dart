@@ -26,6 +26,7 @@ class ContactList with ChangeNotifier {
           contact['lastname'] as String,
           contact['phone'] as String,
           contact['email'] as String,
+          contact['address'] as String,
           contact['icon'] as String,
           contact['labels'] as List<dynamic>));
     }

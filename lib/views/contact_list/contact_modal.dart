@@ -83,8 +83,8 @@ class ContactModal extends StatelessWidget {
                         children: <Widget>[
                           ClipOval(
                             child: Container(
-                              width: 40,
-                              height: 40,
+                              width: 50,
+                              height: 50,
                               child: RawMaterialButton(
                                 onPressed: () {
                                   Navigator.popAndPushNamed(
@@ -95,27 +95,23 @@ class ContactModal extends StatelessWidget {
                                 child: Icon(
                                   Icons.edit_outlined,
                                   size: 28,
-                                  color: myDark,
+                                  color: myBlue,
                                 ),
                               ),
                             ),
                           ),
                           ClipOval(
                             child: Container(
-                              width: 40,
-                              height: 40,
+                              width: 50,
+                              height: 50,
                               child: RawMaterialButton(
                                 onPressed: () {
-                                  ContactService.removeContact(contact.pk);
-                                  context
-                                      .read<ContactList>()
-                                      .removeContact(contact);
-                                  Navigator.pop(context);
+                                  _showMaterialDialog(context, contact);
                                 },
                                 child: Icon(
                                   Icons.delete_forever_outlined,
                                   size: 28,
-                                  color: myDark,
+                                  color: myRed,
                                 ),
                               ),
                             ),
@@ -195,6 +191,9 @@ class ContactModal extends StatelessWidget {
                   labelText: 'Email',
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   filled: false,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
                 ),
                 initialValue: contact.email,
               ),
@@ -208,8 +207,11 @@ class ContactModal extends StatelessWidget {
                   labelText: 'Adresse',
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   filled: false,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                // initialValue: contact.address,
+                initialValue: contact.address,
               ),
             ),
           ],
@@ -217,4 +219,30 @@ class ContactModal extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _showMaterialDialog(BuildContext context, Contact contact) {
+  return showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      content: const Text('Supprimer ce contact ?'),
+      actions: <Widget>[
+        FlatButton(
+          child: const Text('Annuler'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: const Text('Supprimer'),
+          onPressed: () {
+            ContactService.removeContact(contact.pk);
+            context.read<ContactList>().removeContact(contact);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    ),
+  );
 }

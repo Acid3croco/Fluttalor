@@ -85,6 +85,16 @@ class _LoginViewState extends State<LoginView> {
                               labelText: 'Addresse email',
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 25),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(50),
+                                ),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                             keyboardType: TextInputType.emailAddress,
                             validator: (String value) {
@@ -129,6 +139,16 @@ class _LoginViewState extends State<LoginView> {
                               labelText: 'Mot de passe',
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 25),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(50),
+                                ),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                             obscureText: true,
                             validator: (String value) {
