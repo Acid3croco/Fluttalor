@@ -10,7 +10,8 @@ class Contact {
       String email,
       String address,
       String icon,
-      List<dynamic> labels) {
+      List<dynamic> labels,
+      bool profile) {
     _pk = pk;
     _nickname = nickname;
     _firstname = firstname;
@@ -19,6 +20,7 @@ class Contact {
     _email = email;
     _address = address;
     _icon = icon;
+    _profile = profile;
     setLabel(labels);
   }
 
@@ -30,6 +32,7 @@ class Contact {
   String _email;
   String _address;
   String _icon;
+  bool _profile;
   List<Label> _labels;
 
   int get pk => _pk;
@@ -40,6 +43,7 @@ class Contact {
   String get email => _email;
   String get address => _address;
   String get icon => _icon;
+  bool get profile => _profile;
   List<Label> get labels => _labels;
 
   void modifyContact(Map<String, String> newInfo) {

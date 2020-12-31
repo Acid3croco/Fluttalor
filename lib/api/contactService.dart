@@ -106,7 +106,8 @@ class ContactService {
           contact['email'] as String,
           contact['address'] as String,
           contact['icon'] as String,
-          contact['labels'] as List<dynamic>);
+          contact['labels'] as List<dynamic>,
+          contact['profile'] as bool);
       return newContact;
     } else if (response.statusCode == 401) {
       AuthService.refreshToken();
@@ -151,7 +152,7 @@ class ContactService {
       body: json.encode(requestBody),
     );
 
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       final dynamic contactRet = json.decode(response.body);
 

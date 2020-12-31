@@ -1,3 +1,5 @@
+import 'package:fluttalor/api/authentificationService.dart';
+import 'package:fluttalor/views/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -132,10 +134,13 @@ class ContactModal extends StatelessWidget {
                                 height: 50,
                                 child: RawMaterialButton(
                                   onPressed: () {
-                                    _showMaterialDialog(context, contact);
+                                    _showMaterialDialog(
+                                        context, contact, contact.profile);
                                   },
                                   child: Icon(
-                                    Icons.delete_forever_outlined,
+                                    contact.profile
+                                        ? Icons.logout
+                                        : Icons.delete_forever_outlined,
                                     size: 28,
                                     color: myRed,
                                   ),
@@ -258,11 +263,14 @@ class ContactModal extends StatelessWidget {
   }
 }
 
-Future<void> _showMaterialDialog(BuildContext context, Contact contact) {
+Future<void> _showMaterialDialog(
+    BuildContext context, Contact contact, bool profile) {
   return showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      content: const Text('Supprimer ce contact ?'),
+      content: profile
+          ? const Text('Se déconnecter ?')
+          : const Text('Supprimer ce contact ?'),
       actions: <Widget>[
         FlatButton(
           child: const Text('Annuler'),
@@ -271,17 +279,33 @@ Future<void> _showMaterialDialog(BuildContext context, Contact contact) {
           },
         ),
         FlatButton(
-          child: Text(
-            'Supprimer',
-            style: TextStyle(
-              color: myRed,
-            ),
-          ),
+          child: profile
+              ? Text(
+                  'Déconnecter',
+                  style: TextStyle(
+                    color: myRed,
+                  ),
+                )
+              : Text(
+                  'Supprimer',
+                  style: TextStyle(
+                    color: myRed,
+                  ),
+                ),
           onPressed: () {
-            ContactService.removeContact(contact.pk);
-            context.read<ContactList>().removeContact(contact);
-            Navigator.pop(context);
-            Navigator.pop(context);
+            if (profile) {
+              AuthService.logout();
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AuthenticationView.id,
+                (Route<dynamic> route) => false,
+              );
+            } else {
+              ContactService.removeContact(contact.pk);
+              context.read<ContactList>().removeContact(contact);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
           },
         ),
       ],

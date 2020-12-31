@@ -28,7 +28,8 @@ class ContactList with ChangeNotifier {
           contact['email'] as String,
           contact['address'] as String,
           contact['icon'] as String,
-          contact['labels'] as List<dynamic>));
+          contact['labels'] as List<dynamic>,
+          contact['profile'] as bool));
     }
 
     _contactList = contactList;

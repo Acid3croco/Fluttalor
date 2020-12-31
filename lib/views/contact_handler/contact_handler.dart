@@ -158,7 +158,9 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     return Scaffold(
       appBar: AppBar(
         title: _modify
-            ? const Text('Modifier contact')
+            ? widget.contact.profile
+                ? const Text('Modifier mon profil')
+                : const Text('Modifier contact')
             : const Text('Ajouter un contact'),
         leadingWidth: 60,
         actions: <Widget>[
@@ -216,13 +218,17 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                 child: TextFormField(
                   maxLines: null,
                   controller: _nickname,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.people_outlined),
-                    labelText: 'Surnom',
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.people_outlined),
+                    labelText:
+                        widget.contact.profile ? "Nom d'utilisateur" : 'Surnom',
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     filled: false,
                   ),
                   validator: (String value) {
+                    if (widget.contact.profile && value.isEmpty) {
+                      return "Vous en pouvez pas avoir un nom d'utilisateur vide.";
+                    }
                     if (_nullField) {
                       return "Vous devez remplir au moins l'un de ces champs.";
                     }

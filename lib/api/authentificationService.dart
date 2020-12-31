@@ -11,7 +11,8 @@ class AuthService {
 
   // Login
   static Future<bool> login(String email, String password) async {
-    const String uri = '$apiUrl/user/login/';
+    const String uri = '$apiUrl/account/login/';
+
     final dynamic requestBody = <String, String>{
       'username': email,
       'password': password
@@ -79,7 +80,7 @@ class AuthService {
 
   //Register
   static Future<bool> register(String email, String password) async {
-    const String uri = '$apiUrl/user/register/';
+    const String uri = '$apiUrl/user/';
     final dynamic requestBody = <String, String>{
       'username': email,
       'email': email,
