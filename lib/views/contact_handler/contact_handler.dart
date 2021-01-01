@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:geocoder/geocoder.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
@@ -41,6 +44,21 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   List<dynamic> _labelsListInit;
 
   bool _nullField = false;
+  File _image;
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> getImage() async {
+    final PickedFile pickedFile =
+        await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   void _createContact() {
     ContactService.createContact(
@@ -50,7 +68,8 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
             _phone.text,
             _email.text,
             _address.text,
-            _labelsList)
+            _labelsList,
+            _image)
         .then((Contact result) {
       if (result != null) {
         print('Submit success');
@@ -73,7 +92,8 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
             _phone.text,
             _email.text,
             _address.text,
-            _labelsList)
+            _labelsList,
+            _image)
         .then((Contact result) {
       if (result != null) {
         // _formKey.currentState.reset();
@@ -127,7 +147,6 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     String phoneInit = '';
     String emailInit = '';
     String addressInit = '';
-
     List<dynamic> labelsListInit = <dynamic>[];
 
     contact = widget.contact;
@@ -178,6 +197,19 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 10),
+                child: GestureDetector(
+                  onTap: getImage,
+                  child: CircleAvatar(
+                    radius: 80,
+                    child: _image == null
+                        ? const Text('No image selected.')
+                        : null,
+                    backgroundImage: backgroundImageGetter(),
+                  ),
+                ),
+              ),
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -220,14 +252,17 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                   controller: _nickname,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.people_outlined),
-                    labelText:
-                        widget.contact.profile ? "Nom d'utilisateur" : 'Surnom',
+                    labelText: widget.contact != null && widget.contact.profile
+                        ? "Nom d'utilisateur"
+                        : 'Surnom',
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     filled: false,
                   ),
                   validator: (String value) {
-                    if (widget.contact.profile && value.isEmpty) {
-                      return "Vous en pouvez pas avoir un nom d'utilisateur vide.";
+                    if (widget.contact != null &&
+                        widget.contact.profile &&
+                        value.isEmpty) {
+                      return "Vous ne pouvez pas avoir un nom d'utilisateur vide.";
                     }
                     if (_nullField) {
                       return "Vous devez remplir au moins l'un de ces champs.";
@@ -379,6 +414,16 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
         ),
       ),
     );
+  }
+
+  ImageProvider backgroundImageGetter() {
+    if (_image != null) {
+      return FileImage(_image);
+    } else if (contact.icon != null) {
+      return NetworkImage(contact.icon);
+    } else {
+      return null;
+    }
   }
 }
 

@@ -25,6 +25,11 @@ class _SignupViewState extends State<SignupView> {
   String _passwordError = '';
   String _passwordVerifyError = '';
 
+  bool _hidePassword = true;
+  IconData _passwordIcon = Icons.visibility;
+  bool _hidePasswordVerify = true;
+  IconData _passwordVerifyIcon = Icons.visibility;
+
   void _submit() {
     _formKey.currentState.validate();
     if (_formValid && _password.text == _passwordVerify.text) {
@@ -47,6 +52,24 @@ class _SignupViewState extends State<SignupView> {
     }
     setState(() {
       _formValid = true;
+    });
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+      _passwordIcon = _passwordIcon == Icons.visibility
+          ? Icons.visibility_off
+          : Icons.visibility;
+    });
+  }
+
+  void _togglePasswordVerifyVisibility() {
+    setState(() {
+      _hidePasswordVerify = !_hidePasswordVerify;
+      _passwordVerifyIcon = _passwordVerifyIcon == Icons.visibility
+          ? Icons.visibility_off
+          : Icons.visibility;
     });
   }
 
@@ -141,22 +164,29 @@ class _SignupViewState extends State<SignupView> {
                         Container(
                           child: TextFormField(
                             controller: _password,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: GestureDetector(
+                                  onTap: () => _togglePasswordVisibility(),
+                                  child: Icon(_passwordIcon),
+                                ),
+                              ),
                               labelText: 'Mot de passe',
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                               filled: true,
                               fillColor: Colors.white,
-                              contentPadding: EdgeInsets.symmetric(
+                              contentPadding: const EdgeInsets.symmetric(
                                   vertical: 20, horizontal: 25),
-                              border: OutlineInputBorder(
+                              border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(50),
                                 ),
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            obscureText: true,
+                            obscureText: _hidePassword,
                             validator: (String value) {
                               if (value.trim().isEmpty) {
                                 setState(() {
@@ -196,22 +226,30 @@ class _SignupViewState extends State<SignupView> {
                         Container(
                           child: TextFormField(
                             controller: _passwordVerify,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      _togglePasswordVerifyVisibility(),
+                                  child: Icon(_passwordVerifyIcon),
+                                ),
+                              ),
                               labelText: 'Vérification du mot de passe',
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                               filled: true,
                               fillColor: Colors.white,
-                              contentPadding: EdgeInsets.symmetric(
+                              contentPadding: const EdgeInsets.symmetric(
                                   vertical: 20, horizontal: 25),
-                              border: OutlineInputBorder(
+                              border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(50),
                                 ),
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            obscureText: true,
+                            obscureText: _hidePasswordVerify,
                             validator: (String value) {
                               if (_password.text != _passwordVerify.text) {
                                 setState(() {

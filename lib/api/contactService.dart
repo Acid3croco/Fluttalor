@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 // import 'dart:convert';
 import 'package:fluttalor/.env.dart';
@@ -68,13 +69,14 @@ class ContactService {
       String _phone,
       String _email,
       String _address,
-      List<dynamic> _labels) async {
+      List<dynamic> _labels,
+      File _image) async {
     const String uri = '$apiUrl/contact/';
     final String accessToken = await _storage.read(key: 'access');
 
     _labels ??= <dynamic>[];
 
-    final dynamic requestBody = <String, dynamic>{
+    final Map<String, dynamic> requestBody = <String, dynamic>{
       'nickname': _nickname,
       'firstname': _firstname,
       'lastname': _lastname,
@@ -125,14 +127,15 @@ class ContactService {
       String _phone,
       String _email,
       String _address,
-      List<dynamic> _labels) async {
+      List<dynamic> _labels,
+      File _image) async {
     final int pk = contact.pk;
     final String uri = '$apiUrl/contact/$pk/';
     final String accessToken = await _storage.read(key: 'access');
 
     _labels ??= <dynamic>[];
 
-    final dynamic requestBody = <String, dynamic>{
+    final Map<String, dynamic> requestBody = <String, dynamic>{
       'nickname': _nickname,
       'firstname': _firstname,
       'lastname': _lastname,
