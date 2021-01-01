@@ -9,6 +9,7 @@ import 'package:fluttalor/classes/contact.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 
 class ContactService {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
@@ -86,18 +87,46 @@ class ContactService {
       'labels_id': _labels
     };
 
-    final http.Response response = await http.post(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken'
-      },
-      body: json.encode(requestBody),
-    );
+    // final http.Response response = await http.post(
+    //   uri,
+    //   headers: <String, String>{
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'Bearer $accessToken'
+    //   },
+    //   body: json.encode(requestBody),
+    // );
+
+    final Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    };
+
+    final Uri _uri = Uri.parse(uri);
+    final MultipartRequest request = http.MultipartRequest('POST', _uri)
+      ..headers.addAll(headers)
+      ..fields['nickname'] = _nickname
+      ..fields['firstname'] = _firstname
+      ..fields['lastname'] = _lastname
+      ..fields['phone'] = _phone
+      ..fields['email'] = _email
+      ..fields['address'] = _address;
+    // ..fields['labels_id'] = _labels.toString();
+
+    if (_image != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'icon',
+          _image.readAsBytesSync(),
+        ),
+      );
+    }
+    final StreamedResponse response = await request.send();
 
     // print(response.body);
     if (response.statusCode == 201) {
-      final dynamic contact = json.decode(response.body);
+      // final dynamic contact = json.decode(response.body);
+      final dynamic contact =
+          json.decode(await response.stream.bytesToString());
 
       final Contact newContact = Contact(
           contact['pk'] as int,

@@ -419,7 +419,7 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   ImageProvider backgroundImageGetter() {
     if (_image != null) {
       return FileImage(_image);
-    } else if (contact.icon != null) {
+    } else if (contact != null && contact.icon != null) {
       return NetworkImage(contact.icon);
     } else {
       return null;
