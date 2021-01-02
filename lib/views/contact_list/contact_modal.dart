@@ -22,24 +22,6 @@ class ContactModal extends StatelessWidget {
 
   final Contact contact;
 
-  String _buildContactName() {
-    String name = '';
-
-    for (final String tmp in <String>[
-      contact.firstname,
-      contact.nickname,
-      contact.lastname
-    ]) {
-      if (tmp.isNotEmpty) {
-        if (name.isNotEmpty) {
-          name += ' ';
-        }
-        name += tmp;
-      }
-    }
-    return name;
-  }
-
   Future<void> _launchUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -165,7 +147,7 @@ class ContactModal extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      _buildContactName(),
+                      contact.getContactName(),
                       style: const TextStyle(
                         fontSize: 32,
                       ),

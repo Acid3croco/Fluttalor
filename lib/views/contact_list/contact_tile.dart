@@ -26,7 +26,7 @@ class ContactTile extends StatelessWidget {
               : null),
       title: (contact != null)
           ? Text(
-              '${contact.nickname} ${contact.firstname} ${contact.lastname}',
+              contact.getContactName(),
               style: const TextStyle(fontWeight: FontWeight.w500),
             )
           : const Text(''),

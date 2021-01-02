@@ -115,4 +115,18 @@ class Contact {
 
     return labelList;
   }
+
+  String getContactName() {
+    String name = '';
+
+    for (final String tmp in <String>[firstname, nickname, lastname]) {
+      if (tmp.isNotEmpty) {
+        if (name.isNotEmpty) {
+          name += ' ';
+        }
+        name += tmp;
+      }
+    }
+    return name;
+  }
 }
