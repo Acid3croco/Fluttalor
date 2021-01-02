@@ -34,7 +34,6 @@ Future<bool> main() async {
     runApp(
       MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
-          // ChangeNotifierProvider(create: (_) => Profile()),
           ChangeNotifierProvider<ContactList>(create: (_) => ContactList()),
           ChangeNotifierProvider<LabelList>(create: (_) => LabelList()),
         ],

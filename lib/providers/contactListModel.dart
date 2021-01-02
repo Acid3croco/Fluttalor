@@ -21,12 +21,12 @@ class ContactList with ChangeNotifier {
     _contactList.sort((Contact a, Contact b) {
       int res;
 
-      res = a.nickname.compareTo(b.nickname);
-      if (res == 0) {
-        res = a.firstname.compareTo(b.firstname);
-      }
+      res = a.firstname.compareTo(b.firstname);
       if (res == 0) {
         res = a.lastname.compareTo(b.lastname);
+      }
+      if (res == 0) {
+        res = a.nickname.compareTo(b.nickname);
       }
       return res;
     });
