@@ -87,48 +87,20 @@ class ContactService {
       'labels_id': _labels
     };
 
-    // final http.Response response = await http.post(
-    //   uri,
-    //   headers: <String, String>{
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer $accessToken'
-    //   },
-    //   body: json.encode(requestBody),
-    // );
-
-    final Map<String, String> headers = <String, String>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken'
-    };
-
-    final Uri _uri = Uri.parse(uri);
-    final MultipartRequest request = http.MultipartRequest('POST', _uri)
-      ..headers.addAll(headers)
-      ..fields['nickname'] = _nickname
-      ..fields['firstname'] = _firstname
-      ..fields['lastname'] = _lastname
-      ..fields['phone'] = _phone
-      ..fields['email'] = _email
-      ..fields['address'] = _address;
-    // ..fields['labels_id'] = _labels.toString();
-
-    if (_image != null) {
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          'icon',
-          _image.readAsBytesSync(),
-        ),
-      );
-    }
-    final StreamedResponse response = await request.send();
+    final http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: json.encode(requestBody),
+    );
 
     // print(response.body);
     if (response.statusCode == 201) {
-      // final dynamic contact = json.decode(response.body);
-      final dynamic contact =
-          json.decode(await response.stream.bytesToString());
+      final dynamic contact = json.decode(response.body);
 
-      final Contact newContact = Contact(
+      Contact newContact = Contact(
           contact['pk'] as int,
           contact['nickname'] as String,
           contact['firstname'] as String,
@@ -139,6 +111,8 @@ class ContactService {
           contact['icon'] as String,
           contact['labels'] as List<dynamic>,
           contact['profile'] as bool);
+
+      newContact = await uploadFile(newContact, _image);
       return newContact;
     } else if (response.statusCode == 401) {
       AuthService.refreshToken();
@@ -188,17 +162,11 @@ class ContactService {
     if (response.statusCode == 200) {
       final dynamic contactRet = json.decode(response.body);
 
-      contact.modifyContact(<String, String>{
-        'nickname': contactRet['nickname'] as String,
-        'firstname': contactRet['firstname'] as String,
-        'lastname': contactRet['lastname'] as String,
-        'phone': contactRet['phone'] as String,
-        'email': contactRet['email'] as String,
-        'address': contactRet['address'] as String,
-        'icon': contactRet['icon'] as String,
-      });
-      contact.setLabel(contactRet['labels'] as List<dynamic>);
-
+      if (_image == null) {
+        contact = _modifyContactAfterRequest(contact, contactRet);
+      } else {
+        contact = await uploadFile(contact, _image);
+      }
       return contact;
     } else if (response.statusCode == 401) {
       AuthService.refreshToken();
@@ -228,5 +196,55 @@ class ContactService {
     }
 
     return false;
+  }
+
+  static Future<Contact> uploadFile(Contact contact, File image) async {
+    final int pk = contact.pk;
+    final String uri = '$apiUrl/contact/$pk/';
+    final String accessToken = await _storage.read(key: 'access');
+
+    final Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken'
+    };
+
+    final Uri _uri = Uri.parse(uri);
+    final MultipartRequest request = http.MultipartRequest('PUT', _uri)
+      ..headers.addAll(headers);
+
+    if (image != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath('icon', image.path),
+      );
+    } else {
+      return contact;
+    }
+
+    final StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      final dynamic contactRet =
+          json.decode(await response.stream.bytesToString());
+
+      contact = _modifyContactAfterRequest(contact, contactRet);
+      return contact;
+    } else {
+      return null;
+    }
+  }
+
+  static Contact _modifyContactAfterRequest(
+      Contact contact, dynamic contactRet) {
+    contact.modifyContact(<String, String>{
+      'nickname': contactRet['nickname'] as String,
+      'firstname': contactRet['firstname'] as String,
+      'lastname': contactRet['lastname'] as String,
+      'phone': contactRet['phone'] as String,
+      'email': contactRet['email'] as String,
+      'address': contactRet['address'] as String,
+      'icon': contactRet['icon'] as String,
+    });
+    contact.setLabel(contactRet['labels'] as List<dynamic>);
+    return contact;
   }
 }
