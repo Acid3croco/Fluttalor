@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fluttalor/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:geocoder/geocoder.dart';
@@ -48,8 +49,13 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   final ImagePicker picker = ImagePicker();
 
   Future<void> getImage() async {
-    final PickedFile pickedFile =
-        await picker.getImage(source: ImageSource.gallery);
+    PickedFile pickedFile;
+    try {
+      pickedFile = await picker.getImage(source: ImageSource.gallery);
+    } catch (e) {
+      print('not authorized to open gallery');
+      return;
+    }
 
     setState(() {
       if (pickedFile != null) {
@@ -204,9 +210,16 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                   child: CircleAvatar(
                     radius: 80,
                     child: _image == null
-                        ? const Icon(
-                            Icons.add_a_photo_outlined,
-                            size: 50,
+                        ? ClipOval(
+                            child: Container(
+                              height: 70,
+                              width: 70,
+                              color: const Color(0xFF212227).withOpacity(0.5),
+                              child: const Icon(
+                                Icons.add_a_photo_outlined,
+                                size: 50,
+                              ),
+                            ),
                           )
                         : null,
                     backgroundImage: backgroundImageGetter(),
