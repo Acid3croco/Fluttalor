@@ -1,16 +1,17 @@
-import 'package:fluttalor/providers/contactListModel.dart';
-import 'package:fluttalor/providers/labelListModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:fluttalor/views/contact_list/contact_list.dart';
-import 'package:fluttalor/views/contact_handler/contact_handler.dart';
+import 'package:provider/provider.dart';
+
+import 'package:fluttalor/providers/labelListModel.dart';
+import 'package:fluttalor/providers/contactListModel.dart';
 import 'package:fluttalor/views/authentication/login.dart';
 import 'package:fluttalor/views/authentication/signup.dart';
+import 'package:fluttalor/views/contact_list/contact_list.dart';
 import 'package:fluttalor/views/authentication/authentication.dart';
+import 'package:fluttalor/views/contact_handler/contact_handler.dart';
 import 'package:fluttalor/api/authentificationService.dart';
 import 'package:fluttalor/utils/colors.dart';
-import 'package:provider/provider.dart';
 
 AuthService appAuth = AuthService();
 
@@ -66,22 +67,27 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(50),
-            ),
             borderSide: BorderSide.none,
           ),
         ),
       ),
       home: _defaultHome,
+      onGenerateRoute: (RouteSettings settings) {
+        if (settings.name == ContactHandlerView.id) {
+          final ContactHandlerArguments args =
+              settings.arguments as ContactHandlerArguments;
+
+          return MaterialPageRoute<ContactHandlerView>(
+            builder: (BuildContext context) => ContactHandlerView(
+              contact: args != null ? args.contact : null,
+            ),
+          );
+        }
+        return null;
+      },
       routes: <String, WidgetBuilder>{
         ContactListView.id: (BuildContext context) => ContactListView(),
-        ContactHandlerView.id: (BuildContext context) => ContactHandlerView(),
         LoginView.id: (BuildContext context) => LoginView(),
         SignupView.id: (BuildContext context) => SignupView(),
         AuthenticationView.id: (BuildContext context) => AuthenticationView(),

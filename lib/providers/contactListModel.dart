@@ -26,8 +26,10 @@ class ContactList with ChangeNotifier {
           contact['lastname'] as String,
           contact['phone'] as String,
           contact['email'] as String,
+          contact['address'] as String,
           contact['icon'] as String,
-          contact['labels'] as List<dynamic>));
+          contact['labels'] as List<dynamic>,
+          contact['profile'] as bool));
     }
 
     _contactList = contactList;
@@ -39,12 +41,11 @@ class ContactList with ChangeNotifier {
     notifyListeners();
   }
 
-  void modifyContact(Contact contact, Map<String, String> newInfo) {
-    contact.modifyContact(newInfo);
+  void modifyContact() {
     notifyListeners();
   }
 
-  void deleteContact(Contact contact) {
+  void removeContact(Contact contact) {
     _contactList.remove(contact);
     notifyListeners();
   }
