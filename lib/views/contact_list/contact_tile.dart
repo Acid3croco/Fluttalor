@@ -15,15 +15,26 @@ class ContactTile extends StatelessWidget {
 
   final Contact contact;
 
+  ImageProvider _getContactImage() {
+    if (contact != null && contact.icon != null) {
+      try {
+        return NetworkImage(contact.icon);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      tileColor: contact.profile ? myGreyLight : null,
+      contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       leading: CircleAvatar(
-          radius: 30,
-          backgroundImage: (contact != null && contact.icon != null)
-              ? NetworkImage(contact.icon)
-              : null),
+        radius: 30,
+        backgroundImage: _getContactImage(),
+      ),
       title: (contact != null)
           ? Text(
               contact.getContactName(),
@@ -36,7 +47,7 @@ class ContactTile extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   for (final Label label in contact.labels)
-                    ContactBadge(name: label.name)
+                    ContactBadge(name: label.name, color: label.getLabelColor())
                 ],
               ),
             )
@@ -59,9 +70,11 @@ class ContactBadge extends StatelessWidget {
   const ContactBadge({
     Key key,
     @required this.name,
+    @required this.color,
   }) : super(key: key);
 
   final String name;
+  final MaterialColor color;
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +84,12 @@ class ContactBadge extends StatelessWidget {
         elevation: 0,
         toAnimate: false,
         shape: BadgeShape.square,
-        badgeColor: myGreen,
+        badgeColor: color,
         borderRadius: BorderRadius.circular(50),
         badgeContent: Text(
           name,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: (color == myYellow) ? myDark : Colors.white,
             fontWeight: FontWeight.w500,
             fontSize: 12,
           ),

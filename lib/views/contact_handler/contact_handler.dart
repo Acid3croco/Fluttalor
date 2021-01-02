@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fluttalor/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:geocoder/geocoder.dart';
@@ -48,8 +49,13 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
   final ImagePicker picker = ImagePicker();
 
   Future<void> getImage() async {
-    final PickedFile pickedFile =
-        await picker.getImage(source: ImageSource.gallery);
+    PickedFile pickedFile;
+    try {
+      pickedFile = await picker.getImage(source: ImageSource.gallery);
+    } catch (e) {
+      print('not authorized to open gallery');
+      return;
+    }
 
     setState(() {
       if (pickedFile != null) {
@@ -204,7 +210,17 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                   child: CircleAvatar(
                     radius: 80,
                     child: _image == null
-                        ? const Text('No image selected.')
+                        ? ClipOval(
+                            child: Container(
+                              height: 70,
+                              width: 70,
+                              color: const Color(0xFF212227).withOpacity(0.5),
+                              child: const Icon(
+                                Icons.add_a_photo_outlined,
+                                size: 50,
+                              ),
+                            ),
+                          )
                         : null,
                     backgroundImage: backgroundImageGetter(),
                   ),
@@ -250,20 +266,13 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                 child: TextFormField(
                   maxLines: null,
                   controller: _nickname,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.people_outlined),
-                    labelText: widget.contact != null && widget.contact.profile
-                        ? "Nom d'utilisateur"
-                        : 'Surnom',
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.people_outlined),
+                    labelText: 'Surnom',
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     filled: false,
                   ),
                   validator: (String value) {
-                    if (widget.contact != null &&
-                        widget.contact.profile &&
-                        value.isEmpty) {
-                      return "Vous ne pouvez pas avoir un nom d'utilisateur vide.";
-                    }
                     if (_nullField) {
                       return "Vous devez remplir au moins l'un de ces champs.";
                     }
@@ -420,10 +429,13 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     if (_image != null) {
       return FileImage(_image);
     } else if (contact != null && contact.icon != null) {
-      return NetworkImage(contact.icon);
-    } else {
-      return null;
+      try {
+        return NetworkImage(contact.icon);
+      } catch (e) {
+        return null;
+      }
     }
+    return null;
   }
 }
 

@@ -52,7 +52,7 @@ class ContactService {
       },
     );
 
-    //print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 401) {
@@ -148,7 +148,7 @@ class ContactService {
       'labels_id': _labels
     };
 
-    print(json.encode(requestBody));
+    // print(json.encode(requestBody));
     final http.Response response = await http.put(
       uri,
       headers: <String, String>{
