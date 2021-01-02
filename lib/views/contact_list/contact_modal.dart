@@ -167,7 +167,9 @@ class ContactModal extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             for (final Label label in contact.labels)
-                              ContactBadge(name: label.name)
+                              ContactBadge(
+                                  name: label.name,
+                                  color: label.getLabelColor())
                           ],
                         ),
                       )

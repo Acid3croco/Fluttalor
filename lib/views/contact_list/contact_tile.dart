@@ -47,7 +47,7 @@ class ContactTile extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   for (final Label label in contact.labels)
-                    ContactBadge(name: label.name)
+                    ContactBadge(name: label.name, color: label.getLabelColor())
                 ],
               ),
             )
@@ -70,9 +70,11 @@ class ContactBadge extends StatelessWidget {
   const ContactBadge({
     Key key,
     @required this.name,
+    @required this.color,
   }) : super(key: key);
 
   final String name;
+  final MaterialColor color;
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +84,12 @@ class ContactBadge extends StatelessWidget {
         elevation: 0,
         toAnimate: false,
         shape: BadgeShape.square,
-        badgeColor: myGreen,
+        badgeColor: color,
         borderRadius: BorderRadius.circular(50),
         badgeContent: Text(
           name,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: (color == myYellow) ? myDark : Colors.white,
             fontWeight: FontWeight.w500,
             fontSize: 12,
           ),
