@@ -58,12 +58,12 @@ class _ContactListViewState extends State<ContactListView> {
       appBar: AppBar(
         title: const Text('Contacts'),
         titleSpacing: 20,
-        actions: const <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: Icon(Icons.search),
-          )
-        ],
+        // actions: const <Widget>[
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 20),
+        //     child: Icon(Icons.search),
+        //   )
+        // ],
       ),
       body: FutureBuilder<bool>(
         future: getData(),
