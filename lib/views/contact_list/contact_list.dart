@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:fluttalor/api/authentificationService.dart';
+import 'package:fluttalor/utils/colors.dart';
+import 'package:fluttalor/views/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -101,15 +104,19 @@ class _ContactListViewState extends State<ContactListView> {
                 ),
               );
             } else {
+              final double _horizontalPadding =
+                  MediaQuery.of(context).size.height / 16;
+              final double _topPadding = MediaQuery.of(context).size.height / 4;
               return Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 3.5,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: _horizontalPadding,
+                      right: _horizontalPadding,
+                      top: _topPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
                         "Vous n'avez aucun contact pour le moment",
                         style: TextStyle(
                           fontSize: 24,
@@ -117,19 +124,42 @@ class _ContactListViewState extends State<ContactListView> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                    Container(
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, ContactHandlerView.id),
-                        child: const Text('Ajouter un contact'),
+                      const SizedBox(height: 30),
+                      Container(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pushNamed(
+                              context, ContactHandlerView.id),
+                          child: const Text('Ajouter un contact'),
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: customShadow[1],
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        boxShadow: customShadow[1],
-                      ),
-                    )
-                  ],
+                      const SizedBox(height: 30),
+                      Container(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            AuthService.logout();
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              AuthenticationView.id,
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: const Text('Changer de compte'),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            onPrimary: myDark,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: customShadow[1],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             }
