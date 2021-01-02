@@ -204,7 +204,10 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                   child: CircleAvatar(
                     radius: 80,
                     child: _image == null
-                        ? const Text('No image selected.')
+                        ? const Icon(
+                            Icons.add_a_photo_outlined,
+                            size: 50,
+                          )
                         : null,
                     backgroundImage: backgroundImageGetter(),
                   ),
