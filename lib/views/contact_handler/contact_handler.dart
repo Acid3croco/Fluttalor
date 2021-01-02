@@ -413,10 +413,13 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
     if (_image != null) {
       return FileImage(_image);
     } else if (contact != null && contact.icon != null) {
-      return NetworkImage(contact.icon);
-    } else {
-      return null;
+      try {
+        return NetworkImage(contact.icon);
+      } catch (e) {
+        return null;
+      }
     }
+    return null;
   }
 }
 

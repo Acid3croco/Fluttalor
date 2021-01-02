@@ -15,15 +15,26 @@ class ContactTile extends StatelessWidget {
 
   final Contact contact;
 
+  ImageProvider _getContactImage() {
+    if (contact != null && contact.icon != null) {
+      try {
+        return NetworkImage(contact.icon);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      tileColor: contact.profile ? myGreyLight : null,
+      contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       leading: CircleAvatar(
-          radius: 30,
-          backgroundImage: (contact != null && contact.icon != null)
-              ? NetworkImage(contact.icon)
-              : null),
+        radius: 30,
+        backgroundImage: _getContactImage(),
+      ),
       title: (contact != null)
           ? Text(
               contact.getContactName(),

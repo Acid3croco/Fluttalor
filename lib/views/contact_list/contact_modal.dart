@@ -58,6 +58,17 @@ class ContactModal extends StatelessWidget {
     }
   }
 
+  ImageProvider _getContactImage() {
+    if (contact != null && contact.icon != null) {
+      try {
+        return NetworkImage(contact.icon);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,9 +91,7 @@ class ContactModal extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 80,
-                    backgroundImage: contact.icon != null
-                        ? NetworkImage(contact.icon)
-                        : null,
+                    backgroundImage: _getContactImage(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
