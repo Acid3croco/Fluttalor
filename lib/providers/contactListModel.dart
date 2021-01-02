@@ -15,6 +15,24 @@ class ContactList with ChangeNotifier {
     return _contactList.length;
   }
 
+  void sortContactList() {
+    final Contact profile = _contactList[0];
+    _contactList.remove(profile);
+    _contactList.sort((Contact a, Contact b) {
+      int res;
+
+      res = a.nickname.compareTo(b.nickname);
+      if (res == 0) {
+        res = a.firstname.compareTo(b.firstname);
+      }
+      if (res == 0) {
+        res = a.lastname.compareTo(b.lastname);
+      }
+      return res;
+    });
+    _contactList.insert(0, profile);
+  }
+
   void setContacts(List<dynamic> contactData) {
     final List<Contact> contactList = <Contact>[];
 
@@ -38,15 +56,18 @@ class ContactList with ChangeNotifier {
 
   void addContact(Contact newContact) {
     _contactList.add(newContact);
+    sortContactList();
     notifyListeners();
   }
 
   void modifyContact() {
+    sortContactList();
     notifyListeners();
   }
 
   void removeContact(Contact contact) {
     _contactList.remove(contact);
+    sortContactList();
     notifyListeners();
   }
 }

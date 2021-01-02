@@ -250,20 +250,13 @@ class _ContactHandlerViewState extends State<ContactHandlerView> {
                 child: TextFormField(
                   maxLines: null,
                   controller: _nickname,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.people_outlined),
-                    labelText: widget.contact != null && widget.contact.profile
-                        ? "Nom d'utilisateur"
-                        : 'Surnom',
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.people_outlined),
+                    labelText: 'Surnom',
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     filled: false,
                   ),
                   validator: (String value) {
-                    if (widget.contact != null &&
-                        widget.contact.profile &&
-                        value.isEmpty) {
-                      return "Vous ne pouvez pas avoir un nom d'utilisateur vide.";
-                    }
                     if (_nullField) {
                       return "Vous devez remplir au moins l'un de ces champs.";
                     }
