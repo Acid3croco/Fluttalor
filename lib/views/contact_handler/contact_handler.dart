@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fluttalor/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:geocoder/geocoder.dart';
