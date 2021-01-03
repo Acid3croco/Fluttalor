@@ -15,7 +15,7 @@ Application alows the user to call phone numbers, locate the user when adding a 
 * Create account
 * Connect to account
 * Edit account
-* Create contact (Firstname, Nickname, Lastname, Phone, Email, Address, Labels)
+* Create contact (Picture, Firstname, Nickname, Lastname, Phone, Email, Address, Labels)
 * Modify contact
 * Delete contact
 * Contact modal
