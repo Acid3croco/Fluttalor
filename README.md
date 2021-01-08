@@ -30,3 +30,7 @@ To build and install fluttalor for android:
 ```flutter build apk --release```
 
 ```flutter install``` with your device connected
+
+## API
+
+You can find the API used for this project [here](https://github.com/Epierrotie/Fluttalor-API)
